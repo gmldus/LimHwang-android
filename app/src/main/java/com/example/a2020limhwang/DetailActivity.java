@@ -9,13 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class DetailActivity extends AppCompatActivity {
 
-    Button btn_edit;
+    Button back, profile, btn_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
+        back = findViewById(R.id.back);
+        profile = findViewById(R.id.profile);
         btn_edit = findViewById(R.id.btn_edit);
     }
 

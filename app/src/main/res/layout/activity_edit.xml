@@ -25,7 +25,8 @@
                     android:background="@color/bg"
                     android:text="back"
                     android:textColor="@android:color/white"
-                    android:textSize="15pt" />
+                    android:textSize="15pt"
+                    android:onClick="onClick"/>
 
                 <Button
                     android:id="@+id/profile"
@@ -35,7 +36,8 @@
                     android:background="@color/bg"
                     android:text="^_^"
                     android:textColor="@android:color/white"
-                    android:textSize="15pt" />
+                    android:textSize="15pt"
+                    android:onClick="onClick"/>
             </RelativeLayout>
 
             <LinearLayout
