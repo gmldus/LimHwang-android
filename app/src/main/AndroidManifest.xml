@@ -17,7 +17,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".MypageActivity"></activity>
+        <activity android:name=".MypageActivity" />
+        <activity android:name=".EditActivity" />
+
     </application>
 
 </manifest>
