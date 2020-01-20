@@ -25,7 +25,8 @@
                     android:background="@color/bg"
                     android:text="back"
                     android:textColor="@android:color/white"
-                    android:textSize="15pt" />
+                    android:textSize="15pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
 
                 <Button
                     android:id="@+id/profile"
@@ -35,7 +36,8 @@
                     android:background="@color/bg"
                     android:text="^_^"
                     android:textColor="@android:color/white"
-                    android:textSize="15pt" />
+                    android:textSize="15pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
             </RelativeLayout>
 
             <LinearLayout
@@ -52,7 +54,8 @@
                     android:textStyle="bold"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_marginLeft="20dp"
+                    android:fontFamily="@font/nanumsquare_light"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -63,7 +66,8 @@
                     android:layout_gravity="bottom"
                     android:layout_weight="1"
                     android:layout_margin="10dp"
-                    android:gravity="right" />
+                    android:gravity="right"
+                    android:fontFamily="@font/nanumsquare_light"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -79,7 +83,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="출석 반영 비율(%) : "
-                android:textSize="25dp" />
+                android:textSize="25dp"
+                android:fontFamily="@font/nanumsquare_light"/>
             <EditText
                 android:id="@+id/rate"
                 android:layout_width="70dp"
@@ -96,7 +101,8 @@
             android:textSize="25dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/nanumsquare_light"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -107,7 +113,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="결석 1회당  "
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
 
             <EditText
                 android:id="@+id/text1"
@@ -118,7 +125,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  점 감점 "
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -130,7 +138,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="결석  "
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
             <EditText
                 android:id="@+id/text2"
                 android:layout_width="60dp"
@@ -140,7 +149,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  회 까지 감점 X "
-                android:textSize="20dp" />
+                android:textSize="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
         </LinearLayout>
         <TextView
             android:layout_width="wrap_content"
@@ -149,7 +159,8 @@
             android:textSize="25dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp"
+            android:fontFamily="@font/nanumsquare_light"/>
         <RadioGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -164,7 +175,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="지각 1회당 감점 점수 :  "
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:fontFamily="@font/nanumsquare_light"/>
                 <EditText
                     android:id="@+id/text3"
                     android:layout_width="60dp"
@@ -182,7 +194,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="지각 몇 회에 결석 1번인지 :  "
-                    android:textSize="20dp" />
+                    android:textSize="20dp"
+                    android:fontFamily="@font/nanumsquare_light"/>
                 <EditText
                     android:id="@+id/text4"
                     android:layout_width="60dp"
@@ -199,7 +212,8 @@
             android:layout_marginTop="10dp"
             android:background="@color/bg"
             android:text="저장"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
