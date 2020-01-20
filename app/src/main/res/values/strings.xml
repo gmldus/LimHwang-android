@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">2020LimHwang</string>
+    <color name="bg">#34558B</color>
 </resources>
