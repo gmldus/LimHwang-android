@@ -26,6 +26,7 @@
                     android:text="back"
                     android:textColor="@android:color/white"
                     android:textSize="15pt"
+                    android:onClick="onClick"/>
                     android:fontFamily="@font/nanumsquare_light"/>
 
                 <Button
@@ -37,7 +38,9 @@
                     android:text="^_^"
                     android:textColor="@android:color/white"
                     android:textSize="15pt"
+                    android:onClick="onClick"/>
                     android:fontFamily="@font/nanumsquare_light"/>
+
             </RelativeLayout>
 
             <LinearLayout

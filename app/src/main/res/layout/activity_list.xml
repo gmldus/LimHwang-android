@@ -22,7 +22,8 @@ android:layout_height="match_parent">
                 android:background="@color/bg"
                 android:textColor="@android:color/white"
                 android:textSize="15pt"
-                android:fontFamily="@font/nanumsquare_light"/>
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
 
             <Button
                 android:id="@+id/profile"
@@ -33,7 +34,8 @@ android:layout_height="match_parent">
                 android:text="^_^"
                 android:textColor="@android:color/white"
                 android:textSize="15pt"
-                android:fontFamily="@font/nanumsquare_light"/>
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
 
         </RelativeLayout>
 

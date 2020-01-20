@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/bg">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -22,7 +23,8 @@
                 android:background="@color/bg"
                 android:textColor="@android:color/white"
                 android:textSize="15pt"
-                android:fontFamily="@font/nanumsquare_light"/>
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
 
             <Button
                 android:id="@+id/profile"
@@ -33,7 +35,9 @@
                 android:text="^_^"
                 android:textColor="@android:color/white"
                 android:textSize="15pt"
-                android:fontFamily="@font/nanumsquare_light"/>
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
+          
         </RelativeLayout>
 
         <TextView
@@ -49,18 +53,16 @@
             android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="001분반"
-            android:textSize="10pt"
-            android:textColor="@android:color/white"
-            android:layout_gravity="right"
-            android:layout_margin="10dp"
-            android:fontFamily="@font/nanumsquare_light"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="001분반"
+        android:textSize="10pt"
+        android:textColor="@android:color/white"
+        android:layout_gravity="right"
+        android:layout_margin="10dp"
+        android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
-
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textSize="8pt"
-                    android:fontFamily="@font/nanumsquare_light"/>
+                          
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -100,7 +102,9 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:text="/"
+                    android:onClick="onClick"/>
                     android:fontFamily="@font/nanumsquare_light"/>
+              
                 <TextView
                     android:id="@+id/score_attendance"
                     android:layout_width="wrap_content"
@@ -111,6 +115,7 @@
                     android:textSize="20pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
+              
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -147,6 +152,7 @@
                     android:textSize="20pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -157,6 +163,7 @@
                     android:fontFamily="@font/nanumsquare_light"/>
 
             </RelativeLayout>
+
         </RelativeLayout>
 
         <LinearLayout
@@ -196,6 +203,7 @@
                 android:text="state"
                 android:textSize="10pt"
                 android:fontFamily="@font/nanumsquare_light"/>
+
         </LinearLayout>
 
         <ListView
@@ -204,6 +212,7 @@
             android:layout_height="wrap_content">
 
         </ListView>
+
     </LinearLayout>
 
 </LinearLayout>
