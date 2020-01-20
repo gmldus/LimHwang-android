@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:textSize="13pt"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/time1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:layout_below="@+id/name"
+            android:textSize="10pt"/>
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:layout_below="@+id/time1"
+            android:textSize="10pt"/>
+
+        <TextView
+            android:id="@+id/percentage"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_marginLeft="10dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:textSize="30dp"/>
+
+    </RelativeLayout>
+</LinearLayout>
