@@ -22,6 +22,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="15pt"
                 android:background="@color/bg"
+                android:fontFamily="@font/nanumsquare_light"
                 android:onClick="onClick"/>
 
         </RelativeLayout>
@@ -41,7 +42,8 @@
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginLeft="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -52,7 +54,8 @@
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:fontFamily="@font/nanumsquare_light"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -72,7 +75,8 @@
             android:textColor="@android:color/black"
             android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/nanumsquare_light"/>
     </LinearLayout>
 
     <LinearLayout
@@ -89,7 +93,8 @@
             android:textColor="@color/bg"
             android:textSize="25sp"
             android:gravity="right"
-            android:layout_marginTop="35dp"/>
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/textView5"
@@ -99,7 +104,8 @@
             android:text="TextView"
             android:textSize="25sp"
             android:gravity="left"
-            android:layout_marginTop="35dp"/>
+            android:layout_marginTop="35dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
@@ -117,7 +123,8 @@
             android:textColor="@color/bg"
             android:textSize="25sp"
             android:gravity="right"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/textView7"
@@ -127,7 +134,8 @@
             android:text="TextView"
             android:textSize="25sp"
             android:gravity="left"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
@@ -145,7 +153,8 @@
             android:textColor="@color/bg"
             android:textSize="25sp"
             android:gravity="right"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/textView9"
@@ -155,7 +164,8 @@
             android:text="TextView"
             android:textSize="25sp"
             android:gravity="left"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
@@ -171,7 +181,8 @@
             android:text="로그아웃"
             android:textSize="20dp"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp">
+            android:layout_marginTop="30dp"
+            android:fontFamily="@font/nanumsquare_light">
         </Button>
     </LinearLayout>
 </LinearLayout>

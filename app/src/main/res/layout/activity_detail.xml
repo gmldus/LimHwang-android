@@ -37,6 +37,7 @@
                 android:textSize="15pt"
                 android:fontFamily="@font/nanumsquare_light"
                 android:onClick="onClick"/>
+          
         </RelativeLayout>
 
         <TextView
@@ -63,8 +64,6 @@
 
     </LinearLayout>
 
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -88,8 +87,7 @@
                     android:layout_height="wrap_content"
                     android:text="20"
                     android:textSize="8pt"
-                    android:fontFamily="@font/nanumsquare_light"/>
-
+                          
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -105,7 +103,8 @@
                     android:layout_alignParentRight="true"
                     android:text="/"
                     android:onClick="onClick"/>
-
+                    android:fontFamily="@font/nanumsquare_light"/>
+              
                 <TextView
                     android:id="@+id/score_attendance"
                     android:layout_width="wrap_content"
@@ -116,7 +115,7 @@
                     android:textSize="20pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
-
+              
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

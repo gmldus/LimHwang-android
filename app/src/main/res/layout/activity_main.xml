@@ -17,33 +17,38 @@
             android:layout_height="60dp"
             android:text="스마트출결"
             android:textSize="40dp"
-            android:gravity="center" />
+            android:gravity="center"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <EditText
             android:id="@+id/id"
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:hint="학번을 입력하세요"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <EditText
             android:id="@+id/password"
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:hint="초기 비밀번호를 입력하세요"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <Button
             android:id="@+id/loginButton"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:text="로그인" />
+            android:text="로그인"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <Button
             android:id="@+id/joinButton"
             android:layout_width="250dp"
             android:layout_height="40dp"
-            android:text="회원가입" />
+            android:text="회원가입"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
