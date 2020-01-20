@@ -17,10 +17,10 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="<"
-                android:background="@color/bg"
+                android:text="back"
                 android:textColor="@android:color/white"
-                android:textSize="15pt"/>
+                android:textSize="15pt"
+                android:background="@color/bg"/>
 
             <Button
                 android:layout_width="wrap_content"
