@@ -53,14 +53,14 @@
             android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="001분반"
-        android:textSize="10pt"
-        android:textColor="@android:color/white"
-        android:layout_gravity="right"
-        android:layout_margin="10dp"
-        android:fontFamily="@font/nanumsquare_light"/>
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="001분반"
+            android:textSize="10pt"
+            android:textColor="@android:color/white"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </LinearLayout>
 
@@ -86,7 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="20"
-                    android:textSize="8pt"
+                    android:textSize="8pt" />
                           
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:text="/"
-                    android:onClick="onClick"/>
+                    android:onClick="onClick"
                     android:fontFamily="@font/nanumsquare_light"/>
               
                 <TextView
