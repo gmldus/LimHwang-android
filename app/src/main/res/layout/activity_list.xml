@@ -8,20 +8,23 @@ android:layout_height="match_parent">
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@color/bg">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="<"
+                android:text="back"
                 android:background="@color/bg"
                 android:textColor="@android:color/white"
                 android:textSize="15pt"/>
 
             <Button
+                android:id="@+id/profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
@@ -29,26 +32,44 @@ android:layout_height="match_parent">
                 android:text="^_^"
                 android:textColor="@android:color/white"
                 android:textSize="15pt" />
+
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2020년도 1학기"
-            android:textSize="10pt"
-            android:textColor="@android:color/white"
-            android:layout_gravity="center_horizontal"/>
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="수업 목록"
-            android:textSize="20pt"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:layout_marginBottom="40dp"
-            android:layout_gravity="center_horizontal"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="수업 목록"
+                android:textSize="20pt"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2020년도 1학기"
+                android:textSize="10pt"
+                android:textColor="@android:color/white"
+                android:layout_gravity="bottom"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:layout_margin="5dp"/>
+        </LinearLayout>
+
+
+
+
+
     </LinearLayout>
+
+
     <ListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
