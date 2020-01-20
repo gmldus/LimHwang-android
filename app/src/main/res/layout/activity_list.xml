@@ -21,7 +21,8 @@ android:layout_height="match_parent">
                 android:text="back"
                 android:background="@color/bg"
                 android:textColor="@android:color/white"
-                android:textSize="15pt"/>
+                android:textSize="15pt"
+                android:fontFamily="@font/nanumsquare_light"/>
 
             <Button
                 android:id="@+id/profile"
@@ -31,7 +32,8 @@ android:layout_height="match_parent">
                 android:background="@color/bg"
                 android:text="^_^"
                 android:textColor="@android:color/white"
-                android:textSize="15pt" />
+                android:textSize="15pt"
+                android:fontFamily="@font/nanumsquare_light"/>
 
         </RelativeLayout>
 
@@ -49,7 +51,8 @@ android:layout_height="match_parent">
                 android:textStyle="bold"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginLeft="20dp"/>
+                android:layout_marginLeft="20dp"
+                android:fontFamily="@font/nanumsquare_light"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -60,12 +63,9 @@ android:layout_height="match_parent">
                 android:layout_gravity="bottom"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:layout_margin="5dp"/>
+                android:layout_margin="5dp"
+                android:fontFamily="@font/nanumsquare_light"/>
         </LinearLayout>
-
-
-
-
 
     </LinearLayout>
 
