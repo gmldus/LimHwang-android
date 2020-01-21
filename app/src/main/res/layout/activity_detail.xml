@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/bg">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="back"
+                android:background="@color/bg"
+                android:textColor="@android:color/white"
+                android:textSize="15pt"
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
+
+            <Button
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@color/bg"
+                android:text="^_^"
+                android:textColor="@android:color/white"
+                android:textSize="15pt"
+                android:fontFamily="@font/nanumsquare_light"
+                android:onClick="onClick"/>
+          
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="알고리즘"
+            android:textSize="20pt"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="001분반"
+            android:textSize="10pt"
+            android:textColor="@android:color/white"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp">
+
+            <RelativeLayout
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:background="@color/light_gray">
+
+                <TextView
+                    android:id="@+id/text_percentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="20"
+                    android:textSize="8pt" />
+                          
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/text_percentage"
+                    android:text="점 중에"
+                    android:textSize="8pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
+
+                <Button
+                    android:id="@+id/btn_edit"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentRight="true"
+                    android:text="/"
+                    android:onClick="onClick"
+                    android:fontFamily="@font/nanumsquare_light"/>
+              
+                <TextView
+                    android:id="@+id/score_attendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/text_percentage"
+                    android:layout_margin="20dp"
+                    android:text="19"
+                    android:textSize="20pt"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/nanumsquare_light"/>
+              
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/score_attendance"
+                    android:layout_alignBottom="@id/score_attendance"
+                    android:text="점"
+                    android:textSize="8pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/light_gray">
+
+                <TextView
+                    android:id="@+id/text_untilF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="F까지"
+                    android:textSize="8pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
+
+                <TextView
+                    android:id="@+id/score_untilF"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/text_untilF"
+                    android:layout_margin="20dp"
+                    android:text="8"
+                    android:textSize="20pt"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/nanumsquare_light"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@id/score_untilF"
+                    android:layout_alignBottom="@id/score_untilF"
+                    android:text="번"
+                    android:textSize="8pt"
+                    android:fontFamily="@font/nanumsquare_light"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/gray">
+
+            <TextView
+                android:id="@+id/date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:text="date"
+                android:textSize="10pt"
+                android:fontFamily="@font/nanumsquare_light"/>
+
+            <TextView
+                android:id="@+id/checktime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center_horizontal"
+                android:padding="10dp"
+                android:text="check time"
+                android:textSize="10pt"
+                android:fontFamily="@font/nanumsquare_light"/>
+
+            <TextView
+                android:id="@+id/state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="10dp"
+                android:text="state"
+                android:textSize="10pt"
+                android:fontFamily="@font/nanumsquare_light"/>
+
+        </LinearLayout>
+
+        <ListView
+            android:id="@+id/list_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        </ListView>
+
+    </LinearLayout>
+
+</LinearLayout>
