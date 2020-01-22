@@ -23,5 +23,11 @@ public class MypageActivity extends AppCompatActivity {
         if (v.getId() == R.id.back) {
             finish();
         }
+        else if (v.getId() == R.id.logoutButton) {
+            Intent intent = new Intent (this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
     }
 }

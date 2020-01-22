@@ -178,7 +178,8 @@
             android:textSize="20dp"
             android:layout_gravity="center"
             android:layout_marginTop="30dp"
-            android:fontFamily="@font/nanumsquare_light">
+            android:fontFamily="@font/nanumsquare_light"
+            android:onClick="onClick">
         </Button>
     </LinearLayout>
 </LinearLayout>
