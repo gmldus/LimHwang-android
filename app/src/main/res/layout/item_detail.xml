@@ -21,7 +21,8 @@
             android:layout_weight="1"
             android:padding="10dp"
             android:text="date"
-            android:textSize="10pt"/>
+            android:textSize="10pt"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/checktime"
@@ -31,7 +32,8 @@
             android:gravity="center_horizontal"
             android:padding="10dp"
             android:text="check time"
-            android:textSize="10pt"/>
+            android:textSize="10pt"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/state"
@@ -41,7 +43,8 @@
             android:gravity="right"
             android:padding="10dp"
             android:text="state"
-            android:textSize="10pt"/>
+            android:textSize="10pt"
+            android:fontFamily="@font/nanumsquare_light"/>
     </LinearLayout>
 
 </LinearLayout>
