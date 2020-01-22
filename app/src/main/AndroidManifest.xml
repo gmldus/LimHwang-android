@@ -3,7 +3,6 @@
     package="com.example.a2020limhwang">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,15 +10,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".DetailActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-      
-        <activity android:name=".MainActivity" />
+
+        <activity android:name=".DetailActivity" />
         <activity android:name=".ListActivity" />
         <activity android:name=".MypageActivity" />
         <activity android:name=".EditActivity" />
@@ -27,3 +26,6 @@
     </application>
 
 </manifest>
+
+
+
