@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.List;
+
 public class ListActivity extends AppCompatActivity {
 
     Button back, profile;
@@ -85,9 +87,9 @@ public class ListActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                //Toast.makeText(getBaseContext(), name[+position], Toast.LENGTH_SHORT).show();
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                startActivity(intent);
             }
         });
     }

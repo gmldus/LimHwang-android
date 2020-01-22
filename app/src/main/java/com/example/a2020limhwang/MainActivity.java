@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://10.101.21.22:3000/post");
+                new JSONTask().execute("http://10.101.53.23:3000/logins/create");
             }
         });
     }
@@ -52,8 +52,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("user_id", str_id);
-                jsonObject.accumulate("user_pw", str_pw);
+                jsonObject.accumulate("login_id", str_id);
+                jsonObject.accumulate("login_password", str_pw);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
