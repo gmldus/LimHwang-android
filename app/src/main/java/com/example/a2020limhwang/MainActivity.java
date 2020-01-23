@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -42,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://10.101.53.23:3000/logins/create");
+                new JSONTask().execute("http://10.101.53.23:3000/students/login");
             }
         });
     }
