@@ -15,8 +15,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/percentage"
-            android:textSize="13pt"
-            android:textStyle="bold"/>
+            android:padding="5dp"
+            android:textSize="10pt"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/time1"
@@ -25,7 +27,9 @@
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/percentage"
             android:layout_below="@+id/name"
-            android:textSize="10pt"/>
+            android:padding="5dp"
+            android:textSize="8pt"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/time2"
@@ -34,7 +38,9 @@
             android:layout_alignParentLeft="true"
             android:layout_toLeftOf="@+id/percentage"
             android:layout_below="@+id/time1"
-            android:textSize="10pt"/>
+            android:padding="5dp"
+            android:textSize="8pt"
+            android:fontFamily="@font/nanumsquare_light"/>
 
         <TextView
             android:id="@+id/percentage"
@@ -43,7 +49,9 @@
             android:layout_marginLeft="10dp"
             android:gravity="center"
             android:layout_alignParentRight="true"
-            android:textSize="30dp"/>
+            android:textSize="30dp"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumsquare_light"/>
 
     </RelativeLayout>
 </LinearLayout>
