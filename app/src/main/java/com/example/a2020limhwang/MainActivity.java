@@ -2,13 +2,16 @@ package com.example.a2020limhwang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,12 +24,16 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     EditText id, pw;
     String str_id, str_pw;
+    ArrayList<String> studentKeyList = new ArrayList<>();
+    ArrayList<String> studentValueList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +122,27 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            try {
+                JSONObject jsonObject = new JSONObject(result);
+                String studentValue = jsonObject.getString("studentInfo");
+                JSONObject studentObject = new JSONObject(studentValue);
+                Iterator i = studentObject.keys();
+
+                while(i.hasNext())
+                {
+                    String b = i.next().toString();
+                    Log.d("key",b);
+                    studentKeyList.add(b);
+                }
+                for(int j = 0; j<studentKeyList.size();j++)
+                {
+                    studentValueList.add(studentObject.getString(studentKeyList.get(j)));
+                    Log.d("key",(j+1)+"번째 key->"+studentKeyList.get(j));
+                    Log.d("value",(j+1)+"번째 value->"+studentValueList.get(j));
+                }
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
     }

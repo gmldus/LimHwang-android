@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +19,7 @@ public class DetailActivity extends AppCompatActivity {
 
     Button back, profile, btn_edit;
     ListView listView;
+    TextView text_percentage;
 
     String[] date = {
             "관현악과",
@@ -67,7 +67,8 @@ public class DetailActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         btn_edit = findViewById(R.id.btn_edit);
 
-        listView=(ListView)findViewById(R.id.list_detail);
+        listView= findViewById(R.id.list_detail);
+        text_percentage = findViewById(R.id.text_percentage);
 
         CustomList adapter = new CustomList(DetailActivity.this);
         listView.setAdapter(adapter);
@@ -116,6 +117,14 @@ public class DetailActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Intent intent = getIntent();
+            ScoreInformation si = (ScoreInformation) intent.getSerializableExtra("score_information");
+            text_percentage.setText(si.rate + "");
+        }
     }
 
 }
