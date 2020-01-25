@@ -96,8 +96,10 @@ public class MainActivity extends AppCompatActivity {
 
                     return buffer.toString();
                 }catch (MalformedURLException e) {
+                    Log.e("err", "Mal");
                     e.printStackTrace();
                 }catch (IOException e) {
+                    Log.e("err", "io1");
                     e.printStackTrace();
                 }finally {
                     if(con != null){
@@ -108,10 +110,12 @@ public class MainActivity extends AppCompatActivity {
                             reader.close();
                         }
                     } catch (IOException e) {
+                        Log.e("err", "io2");
                         e.printStackTrace();
                     }
                 }
             } catch (Exception e) {
+                Log.e("err", "exc");
                 e.printStackTrace();
             }
 
