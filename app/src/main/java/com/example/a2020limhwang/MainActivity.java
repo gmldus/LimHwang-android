@@ -3,8 +3,10 @@ package com.example.a2020limhwang;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +36,8 @@ public class MainActivity extends AppCompatActivity {
     String str_id, str_pw, str_result;
     ArrayList<String> studentKeyList = new ArrayList<>();
     ArrayList<String> studentValueList = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         pw = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
+        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +103,10 @@ public class MainActivity extends AppCompatActivity {
 
                     return buffer.toString();
                 }catch (MalformedURLException e) {
-                    Log.e("err", "Mal");
                     e.printStackTrace();
                 }catch (IOException e) {
-                    Log.e("err", "io1");
+                    //login fail here
+                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }finally {
                     if(con != null){
@@ -110,12 +117,10 @@ public class MainActivity extends AppCompatActivity {
                             reader.close();
                         }
                     } catch (IOException e) {
-                        Log.e("err", "io2");
                         e.printStackTrace();
                     }
                 }
             } catch (Exception e) {
-                Log.e("err", "exc");
                 e.printStackTrace();
             }
 
@@ -135,19 +140,21 @@ public class MainActivity extends AppCompatActivity {
                 Iterator i = studentInfoObject.keys();
                 while(i.hasNext()) {
                     String b = i.next().toString();
-                    Log.d("key", b);
                     studentKeyList.add(b);
                 }
                 for (int j = 0; j < studentKeyList.size(); j++) {
                     studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
+                    editor.putString(studentKeyList.get(j),studentValueList.get(j));
                     Log.d("key",studentKeyList.get(j));
                     Log.d("value",studentValueList.get(j));
                 }
+                editor.commit();
             }catch (JSONException e) {
                 e.printStackTrace();
             }
 
-
+            Intent intent = new Intent(MainActivity.this, ListActivity.class);
+            startActivity(intent);
         }
 
     }
