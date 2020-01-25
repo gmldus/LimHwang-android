@@ -38,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
     String str_id, str_pw, str_result;
     ArrayList<String> studentKeyList = new ArrayList<>();
     ArrayList<String> studentValueList = new ArrayList<>();
+    String[] lectureNum;
+
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -157,16 +159,19 @@ public class MainActivity extends AppCompatActivity {
                     }
                     editor.commit();
 
+                    lectureNum = new String[lectureInfoArray.length()];
                     for(int j = 0; j < lectureInfoArray.length(); j++){
                         JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
                         String id = (String)tmp.get("id_lectures");
                         Log.d("lecnum",id);
+                        lectureNum[j] = id;
                     }
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                intent.putExtra("lectureNum", lectureNum);
                 startActivity(intent);
             }
 
