@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -28,6 +29,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -140,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(str_result);
                     String studentValue = jsonObject.getString("studentInfo");
                     JSONObject studentInfoObject = new JSONObject(studentValue);
+                    JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureNum");
+
                     Iterator i = studentInfoObject.keys();
                     while(i.hasNext()) {
                         String b = i.next().toString();
@@ -152,6 +156,12 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("value",studentValueList.get(j));
                     }
                     editor.commit();
+
+                    for(int j = 0; j < lectureInfoArray.length(); j++){
+                        JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
+                        String id = (String)tmp.get("id_lectures");
+                        Log.d("lecnum",id);
+                    }
                 }catch (JSONException e) {
                     e.printStackTrace();
                 }
