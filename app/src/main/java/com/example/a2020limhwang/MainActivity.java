@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://10.101.53.23:3000/students/login");
+                new JSONTask().execute("http://192.168.25.31:3000/students/login");
             }
         });
     }
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            try {
+            /*try {
                 JSONObject jsonObject = new JSONObject(result);
                 String studentValue = jsonObject.getString("studentInfo");
                 JSONObject studentObject = new JSONObject(studentValue);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }catch (JSONException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
     }
