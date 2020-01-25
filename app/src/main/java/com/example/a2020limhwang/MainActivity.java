@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     EditText id, pw;
-    String str_id, str_pw;
+    String str_id, str_pw, str_result;
     ArrayList<String> studentKeyList = new ArrayList<>();
     ArrayList<String> studentValueList = new ArrayList<>();
 
@@ -122,27 +122,28 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            /*try {
-                JSONObject jsonObject = new JSONObject(result);
-                String studentValue = jsonObject.getString("studentInfo");
-                JSONObject studentObject = new JSONObject(studentValue);
-                Iterator i = studentObject.keys();
 
-                while(i.hasNext())
-                {
+            str_result = result+"";
+            try{
+                JSONObject jsonObject = new JSONObject(str_result);
+                String studentValue = jsonObject.getString("studentInfo");
+                JSONObject studentInfoObject = new JSONObject(studentValue);
+                Iterator i = studentInfoObject.keys();
+                while(i.hasNext()) {
                     String b = i.next().toString();
-                    Log.d("key",b);
+                    Log.d("key", b);
                     studentKeyList.add(b);
                 }
-                for(int j = 0; j<studentKeyList.size();j++)
-                {
-                    studentValueList.add(studentObject.getString(studentKeyList.get(j)));
-                    Log.d("key",(j+1)+"번째 key->"+studentKeyList.get(j));
-                    Log.d("value",(j+1)+"번째 value->"+studentValueList.get(j));
+                for (int j = 0; j < studentKeyList.size(); j++) {
+                    studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
+                    Log.d("key",studentKeyList.get(j));
+                    Log.d("value",studentValueList.get(j));
                 }
             }catch (JSONException e) {
                 e.printStackTrace();
-            }*/
+            }
+
+
         }
 
     }
