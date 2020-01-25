@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
 
                     for(int j = 0; j < lectureInfoArray.length(); j++){
                         JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
-                        String id = (String)tmp.get("id_lectures");
+                        String id = tmp.getString("id_lectures");
                         Log.d("lecnum",id);
                     }
                 }catch (JSONException e) {
