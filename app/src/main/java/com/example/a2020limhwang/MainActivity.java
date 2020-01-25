@@ -106,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }catch (IOException e) {
                     //login fail here
-                    Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
                     e.printStackTrace();
                 }finally {
                     if(con != null){
@@ -129,32 +128,38 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            if (result == null) {
+                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
+            }
+            else {
+                super.onPostExecute(result);
+                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
 
-            str_result = result+"";
-            try{
-                JSONObject jsonObject = new JSONObject(str_result);
-                String studentValue = jsonObject.getString("studentInfo");
-                JSONObject studentInfoObject = new JSONObject(studentValue);
-                Iterator i = studentInfoObject.keys();
-                while(i.hasNext()) {
-                    String b = i.next().toString();
-                    studentKeyList.add(b);
+                str_result = result+"";
+                try{
+                    JSONObject jsonObject = new JSONObject(str_result);
+                    String studentValue = jsonObject.getString("studentInfo");
+                    JSONObject studentInfoObject = new JSONObject(studentValue);
+                    Iterator i = studentInfoObject.keys();
+                    while(i.hasNext()) {
+                        String b = i.next().toString();
+                        studentKeyList.add(b);
+                    }
+                    for (int j = 0; j < studentKeyList.size(); j++) {
+                        studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
+                        editor.putString(studentKeyList.get(j),studentValueList.get(j));
+                        Log.d("key",studentKeyList.get(j));
+                        Log.d("value",studentValueList.get(j));
+                    }
+                    editor.commit();
+                }catch (JSONException e) {
+                    e.printStackTrace();
                 }
-                for (int j = 0; j < studentKeyList.size(); j++) {
-                    studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
-                    editor.putString(studentKeyList.get(j),studentValueList.get(j));
-                    Log.d("key",studentKeyList.get(j));
-                    Log.d("value",studentValueList.get(j));
-                }
-                editor.commit();
-            }catch (JSONException e) {
-                e.printStackTrace();
+
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                startActivity(intent);
             }
 
-            Intent intent = new Intent(MainActivity.this, ListActivity.class);
-            startActivity(intent);
         }
 
     }
