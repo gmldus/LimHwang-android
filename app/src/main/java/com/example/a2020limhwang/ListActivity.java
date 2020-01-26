@@ -55,13 +55,8 @@ public class ListActivity extends AppCompatActivity {
             56
     };
     private String str_result;
-    int numOfLec=5;
-    String[] lectureNum =new String[numOfLec];
-    String[] name= new String[numOfLec];
-    String[] time1 = new String[numOfLec];
-    String[] time2 = new String[numOfLec];
-    String[] beaconID = new String[numOfLec];
-    //String[] lectureNum, name, time1, time2, beaconID;
+    int numOfLec;
+    String[] lectureNum, name, time1, time2, beaconID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,6 +195,12 @@ public class ListActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(str_result);
                 JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
                 numOfLec = lectureInfoArray.length();
+
+                lectureNum =new String[numOfLec];
+                name= new String[numOfLec];
+                time1 = new String[numOfLec];
+                time2 = new String[numOfLec];
+                beaconID = new String[numOfLec];
 
                 for (int i = 0; i < numOfLec; i++) {
                     JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
