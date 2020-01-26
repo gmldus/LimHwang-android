@@ -16,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,6 +32,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -38,10 +41,27 @@ public class ListActivity extends AppCompatActivity {
 
     Button back, profile;
     ListView listView;
+
+    Integer[] percentage = {
+            90,
+            23,
+            34,
+            23,
+            45,
+            56,
+            86,
+            78,
+            45,
+            56
+    };
     private String str_result;
-    int numOfLec;
-    String[] lectureNum, name, time1, time2, beaconID;
-    Integer[] percentage;
+    int numOfLec=5;
+    String[] lectureNum =new String[numOfLec];
+    String[] name= new String[numOfLec];
+    String[] time1 = new String[numOfLec];
+    String[] time2 = new String[numOfLec];
+    String[] beaconID = new String[numOfLec];
+    //String[] lectureNum, name, time1, time2, beaconID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,22 +70,14 @@ public class ListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         lectureNum = intent.getStringArrayExtra("lectureNum");
+
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
-        new JSONTask().execute("http://192.168.25.31:3000/lectures/get");
+        new JSONTask().execute("http://192.168.25.53:3000/lectures/get");
 
-        CustomList adapter = new CustomList(ListActivity.this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-                intent.putExtra("lectureNum", lectureNum[position]);
-                startActivity(intent);
-            }
-        });
+
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -120,7 +132,7 @@ public class ListActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("array", lectureNum);
+                jsonObject.accumulate("array", Arrays.toString(lectureNum));
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -182,35 +194,37 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result+"";
             try{
                 JSONObject jsonObject = new JSONObject(str_result);
                 JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
                 numOfLec = lectureInfoArray.length();
-                name = new String[numOfLec];
-                time1 = new String[numOfLec];
-                time2 = new String[numOfLec];
-                percentage = new Integer[numOfLec];
 
                 for (int i = 0; i < numOfLec; i++) {
                     JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
+                    lectureNum[i] = tmp.getString("id_lectures");
                     name[i] = tmp.getString("name_lectures");
                     time1[i] = tmp.getString("start");
                     time2[i] = tmp.getString("end");
                     beaconID[i] = tmp.getString("id_beacon");
+                    Log.d("lecnum",lectureNum[i]);
                     Log.d("name", name[i]);
                     Log.d("time1", time1[i]);
                     Log.d("time2", time2[i]);
                     Log.d("beaconID", beaconID[i]);
                 }
 
-                lectureNum = new String[lectureInfoArray.length()];
-                for(int j = 0; j < lectureInfoArray.length(); j++){
-                    JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
-                    String id = tmp.getString("id_lectures");
-                    Log.d("lecnum",id);
-                    lectureNum[j] = id;
-                }
+                CustomList adapter = new CustomList(ListActivity.this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                        intent.putExtra("lectureNum", lectureNum[position]);
+                        startActivity(intent);
+                    }
+                });
             }catch (JSONException e) {
                 e.printStackTrace();
             }

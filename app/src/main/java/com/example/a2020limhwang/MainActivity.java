@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://192.168.25.31:3000/students/login");
+                new JSONTask().execute("http://192.168.25.53:3000/students/login");
             }
         });
     }
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 super.onPostExecute(result);
-                Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
 
                 str_result = result+"";
                 try{
