@@ -193,7 +193,7 @@ public class DetailActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(str_result);
                 JSONArray attendanceInfoArray = jsonObject.getJSONArray("data");
                 numOfAtt = attendanceInfoArray.length();
-                
+
                 name = new String[numOfAtt];
                 lectureNum = new String[numOfAtt];
                 date = new String[numOfAtt];
