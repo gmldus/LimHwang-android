@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,52 +16,31 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class ListActivity extends AppCompatActivity {
 
     Button back, profile;
     ListView listView;
-
-    String[] name = {
-            "관현악과",
-            "글로벌협력전공",
-            "기계시스템학부",
-            "독일언어·문화학과",
-            "미디어학부",
-            "소프트웨어융합전공",
-            "시각·영상디자인과",
-            "작곡과",
-            "피아노과",
-            "행정학과"
-    } ;
-
-    String[] time1 = {
-            "Orchestral Instruments",
-            "Global Cooperation",
-            "Mechanical Systems Engineering",
-            "German Language & Culture",
-            "Communication & Media",
-            "Software Convergence",
-            "Visual & Media Design",
-            "Composition",
-            "Piano",
-            "Public Administration"
-    } ;
-
-    String[] time2 = {
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906",
-            "1906"
-    } ;
 
     Integer[] percentage = {
             90,
@@ -73,25 +54,25 @@ public class ListActivity extends AppCompatActivity {
             45,
             56
     };
+    private String str_result;
+    int numOfLec;
+    String[] lectureNum, name, time1, time2, beaconID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
+        Intent intent = getIntent();
+        lectureNum = intent.getStringArrayExtra("lectureNum");
+
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
-        CustomList adapter = new CustomList(ListActivity.this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-                startActivity(intent);
-            }
-        });
+        new JSONTask().execute("http://172.30.1.45:3000/lectures/get");
+
+
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -139,5 +120,116 @@ public class ListActivity extends AppCompatActivity {
         else if (v.getId() == R.id.back) {
             finish();
         }
+    }
+
+    public class JSONTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.accumulate("array", Arrays.toString(lectureNum));
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(urls[0]);
+
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Cache-Control", "no-cache");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Accept", "text/html");
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    con.connect();
+
+                    OutputStream outStream = con.getOutputStream();
+
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();
+
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();
+                }catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    if(con != null){
+                        con.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            str_result = result+"";
+            try{
+                JSONObject jsonObject = new JSONObject(str_result);
+                JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
+                numOfLec = lectureInfoArray.length();
+
+                lectureNum =new String[numOfLec];
+                name= new String[numOfLec];
+                time1 = new String[numOfLec];
+                time2 = new String[numOfLec];
+                beaconID = new String[numOfLec];
+
+                for (int i = 0; i < numOfLec; i++) {
+                    JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
+                    lectureNum[i] = tmp.getString("id_lectures");
+                    name[i] = tmp.getString("name_lectures");
+                    time1[i] = tmp.getString("start");
+                    time2[i] = tmp.getString("end");
+                    beaconID[i] = tmp.getString("id_beacon");
+                    Log.d("lecnum",lectureNum[i]);
+                    Log.d("name", name[i]);
+                    Log.d("time1", time1[i]);
+                    Log.d("time2", time2[i]);
+                    Log.d("beaconID", beaconID[i]);
+                }
+
+                CustomList adapter = new CustomList(ListActivity.this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                        intent.putExtra("lectureNum", lectureNum[position]);
+                        startActivity(intent);
+                    }
+                });
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 }

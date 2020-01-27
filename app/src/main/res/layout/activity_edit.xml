@@ -215,6 +215,7 @@
             android:layout_marginTop="10dp"
             android:background="@color/bg"
             android:text="저장"
+            android:onClick="onClick"
             android:textColor="@android:color/white"
             android:fontFamily="@font/nanumsquare_light"/>
 

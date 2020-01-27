@@ -2,13 +2,19 @@ package com.example.a2020limhwang;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -21,12 +27,21 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     EditText id, pw;
-    String str_id, str_pw;
+    String str_id, str_pw, str_result;
+    ArrayList<String> studentKeyList = new ArrayList<>();
+    ArrayList<String> studentValueList = new ArrayList<>();
+    String[] lectureNum;
+
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         pw = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
+        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://10.101.53.23:3000/students/login");
+                new JSONTask().execute("http://172.30.1.45:3000/students/login");
             }
         });
     }
@@ -91,6 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 }catch (MalformedURLException e) {
                     e.printStackTrace();
                 }catch (IOException e) {
+                    //login fail here
                     e.printStackTrace();
                 }finally {
                     if(con != null){
@@ -113,8 +132,49 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            if (result == null) {
+                Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
+            }
+            else {
+                super.onPostExecute(result);
+                //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+
+                str_result = result+"";
+                try{
+                    JSONObject jsonObject = new JSONObject(str_result);
+                    String studentValue = jsonObject.getString("studentInfo");
+                    JSONObject studentInfoObject = new JSONObject(studentValue);
+                    JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureNum");
+
+                    Iterator i = studentInfoObject.keys();
+                    while(i.hasNext()) {
+                        String b = i.next().toString();
+                        studentKeyList.add(b);
+                    }
+                    for (int j = 0; j < studentKeyList.size(); j++) {
+                        studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
+                        editor.putString(studentKeyList.get(j),studentValueList.get(j));
+                        Log.d("key",studentKeyList.get(j));
+                        Log.d("value",studentValueList.get(j));
+                    }
+                    editor.commit();
+
+                    lectureNum = new String[lectureInfoArray.length()];
+                    for(int j = 0; j < lectureInfoArray.length(); j++){
+                        JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
+                        String id = tmp.getString("id_lectures");
+                        Log.d("lecnum",id);
+                        lectureNum[j] = id;
+                    }
+                }catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                intent.putExtra("lectureNum", lectureNum);
+                startActivity(intent);
+            }
+
         }
 
     }
