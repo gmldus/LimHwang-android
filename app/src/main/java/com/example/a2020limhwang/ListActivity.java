@@ -70,7 +70,7 @@ public class ListActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
-        new JSONTask().execute("http://192.168.25.53:3000/lectures/get");
+        new JSONTask().execute("http://172.30.1.45:3000/lectures/get");
 
 
     }

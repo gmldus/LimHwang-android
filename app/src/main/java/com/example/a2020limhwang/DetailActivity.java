@@ -77,17 +77,9 @@ public class DetailActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         id_students = sharedPreferences.getString("id_students", "");
 
-        new JSONTask().execute("http://192.168.25.31:3000/attendances/get");
+        new JSONTask().execute("http://172.30.1.45:3000/attendances/get");
 
-        CustomList adapter = new CustomList(DetailActivity.this);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                                    int position, long id) {
-                Toast.makeText(getBaseContext(), date[+position], Toast.LENGTH_SHORT).show();
-            }
-        });
+
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -201,6 +193,9 @@ public class DetailActivity extends AppCompatActivity {
                 JSONObject jsonObject = new JSONObject(str_result);
                 JSONArray attendanceInfoArray = jsonObject.getJSONArray("data");
                 numOfAtt = attendanceInfoArray.length();
+                
+                name = new String[numOfAtt];
+                lectureNum = new String[numOfAtt];
                 date = new String[numOfAtt];
                 state = new String[numOfAtt];
 
@@ -216,6 +211,16 @@ public class DetailActivity extends AppCompatActivity {
                     Log.d("date", date[i]);
                     Log.d("state", state[i]);
                 }
+
+                CustomList adapter = new CustomList(DetailActivity.this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+                        Toast.makeText(getBaseContext(), date[+position], Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
             }catch (JSONException e) {
