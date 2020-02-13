@@ -8,7 +8,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -66,6 +68,7 @@ public class BeaconService extends Service {
                 .setContentText("this is beacon").build();
 
         startForeground(1, noti);
+        handler.sendEmptyMessage(0);
     }
     public void onDestroy(){
         super.onDestroy();
@@ -73,6 +76,7 @@ public class BeaconService extends Service {
     }
 
     public int onStartCommand(Intent intent, int flags, int startId){
+
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         myTimer = new BeaconService.MyTimer(20000, 1000);
@@ -128,83 +132,91 @@ public class BeaconService extends Service {
                 }
             }
         });
+        handler.sendEmptyMessage(0);
+        //String s = Integer.toString(beaconList.size());
 
-        String s = Integer.toString(beaconList.size());
-
-        now = System.currentTimeMillis();
-        dateNow = new Date(now);
-        dateFormat = new SimpleDateFormat("HH:mm:ss");
-        allFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        timeNow = dateFormat.format(dateNow);
-        //log
-        Log.d("log now", timeNow);
-        Log.d("log dateNow", dateNow.toString());
-        Log.d("timeNow", timeNow);
-        start = "2020-02-13 19:50:00";
-        end = "2020-02-13 20:50:00";
-
-        try {
-            dateStart = allFormat.parse(start);
-            dateEnd = allFormat.parse(end);
-            //log
-            Log.d("log date start", dateStart.toString());
-            Log.d("log date end", dateEnd.toString());
-
-            long gapStart = dateNow.getTime() - dateStart.getTime();
-            long gapEnd = dateNow.getTime() - dateEnd.getTime();
-
-            gapStart /= 60000;
-            gapEnd /= 60000;
-
-            //log
-            Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
-            Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
-            Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
-
-            Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
-            Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
-            //log
-            Log.d("log gap start", Long.toString(gapStart));
-            Log.d("log gap end", Long.toString(gapEnd));
-
-            if (gapStart >= -10 && gapEnd <=0) {
-                if (attState == 0 && gapStart > 10 && gapEnd < -10) {
-                    Log.d("if", "1");
-                    attState = 2;
-                    //textView3.setText("2. 지각");
-                    try {
-                        Log.d("start", "지각 start");
-                        beaconManager.startRangingBeaconsInRegion(region);
-                        beaconManager.startMonitoringBeaconsInRegion(region);
-                    } catch (RemoteException e) { }
-                }
-                else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
-                    Log.d("if", "2");
-                    attState = 1;
-                    //textView3.setText("1. 출석");
-                    try {
-                        beaconManager.startRangingBeaconsInRegion(region);
-                        beaconManager.startMonitoringBeaconsInRegion(region);
-                        Log.d("start", "출석 start");
-                    } catch (RemoteException e) { }
-                }
-                else if(attState == 0 && gapEnd >= -10 && gapEnd <= 0) {
-                    Log.d("if", "3");
-                    attState = 3;
-                    //textView3.setText("3. 결석");
-                }
-            }
-        }catch (ParseException e){
-            e.printStackTrace();
-        }
-
-        for(Beacon beacon : beaconList){
-            Log.d("hihihihih","hkkkkkkkkkk");
-            //textView.setText("ID : " + beacon.getId1() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
-        }
         return super.onStartCommand(intent, flags, startId);
     }
-    class MyTimer extends CountDownTimer
+    Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            String s = Integer.toString(beaconList.size());
+            //textView.setText(s);
+            now = System.currentTimeMillis();
+            dateNow = new Date(now);
+            dateFormat = new SimpleDateFormat("HH:mm:ss");
+            allFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            timeNow = dateFormat.format(dateNow);
+            //log
+            Log.d("log now", timeNow);
+            Log.d("log dateNow", dateNow.toString());
+            Log.d("timeNow", timeNow);
+            start = "2020-02-13 20:37:00";
+            end = "2020-02-13 21:50:00";
+
+            try {
+                dateStart = allFormat.parse(start);
+                dateEnd = allFormat.parse(end);
+                //log
+                Log.d("log date start", dateStart.toString());
+                Log.d("log date end", dateEnd.toString());
+
+                long gapStart = dateNow.getTime() - dateStart.getTime();
+                long gapEnd = dateNow.getTime() - dateEnd.getTime();
+
+                gapStart /= 60000;
+                gapEnd /= 60000;
+
+                //log
+                Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
+                Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
+                Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
+
+                Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
+                Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
+                //log
+                Log.d("log gap start", Long.toString(gapStart));
+                Log.d("log gap end", Long.toString(gapEnd));
+
+                if (gapStart >= -10 && gapEnd <= 0) {
+                    if (attState == 0 && gapStart > 10 && gapEnd < -10) {
+                        Log.d("if", "1");
+                        attState = 2;
+                        //textView3.setText("2. 지각");
+                        try {
+                            Log.d("start", "지각 start");
+                            beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
+                            beaconManager.startMonitoringBeaconsInRegion(region);
+                        } catch (RemoteException e) {
+                        }
+                    } else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
+                        Log.d("if", "2");
+                        attState = 1;
+                        //textView3.setText("1. 출석");
+                        try {
+                            beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
+                            beaconManager.startMonitoringBeaconsInRegion(region);
+                            Log.d("start", "출석 start");
+                        } catch (RemoteException e) {
+                        }
+                    } else if (attState == 0 && gapEnd >= -10 && gapEnd <= 0) {
+                        Log.d("if", "3");
+                        attState = 3;
+                        //textView3.setText("3. 결석");
+                    }
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            for (Beacon beacon : beaconList) {
+                //textView.setText("ID : " + beacon.getId1() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
+            }
+
+            handler.sendEmptyMessageDelayed(0, 1000);
+        }
+    };
+
+        class MyTimer extends CountDownTimer
     {
         public MyTimer(long millisInFuture, long countDownInterval)
         {
