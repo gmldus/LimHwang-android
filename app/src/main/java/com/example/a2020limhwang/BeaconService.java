@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -13,6 +14,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
@@ -22,10 +26,24 @@ import org.altbeacon.beacon.Identifier;
 import org.altbeacon.beacon.MonitorNotifier;
 import org.altbeacon.beacon.RangeNotifier;
 import org.altbeacon.beacon.Region;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -198,10 +216,14 @@ public class BeaconService extends Service {
                             Log.d("start", "출석 start");
                         } catch (RemoteException e) {
                         }
-                    } else if (attState == 0 && gapEnd >= -10 && gapEnd <= 0) {
-                        Log.d("if", "3");
+                    } else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
+                        Log.d("if", "결석 3");
                         attState = 3;
                         //textView3.setText("3. 결석");
+                    } else if(gapEnd == 0){  //initialize
+                        //new JSONTask().execute("http://192.168.0.43:3000/attendances/update");
+                        attState = 0;
+                        timerState = 0;
                     }
                 }
             } catch (ParseException e) {
@@ -216,7 +238,7 @@ public class BeaconService extends Service {
         }
     };
 
-        class MyTimer extends CountDownTimer
+    class MyTimer extends CountDownTimer
     {
         public MyTimer(long millisInFuture, long countDownInterval)
         {
@@ -234,6 +256,117 @@ public class BeaconService extends Service {
             //textView3.setText("결석");
             //결석처리
         }
+    }
+
+    public class JSONTask extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try{
+                JSONObject jsonObject = new JSONObject();
+                //jsonObject.accumulate("array", Arrays.toString(lectureNum));
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(urls[0]);
+
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Cache-Control", "no-cache");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Accept", "text/html");
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    con.connect();
+
+                    OutputStream outStream = con.getOutputStream();
+
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();
+
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();
+                }catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    if(con != null){
+                        con.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            /*Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            str_result = result+"";
+            try{
+                JSONObject jsonObject = new JSONObject(str_result);
+                JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
+                numOfLec = lectureInfoArray.length();
+
+                lectureNum =new String[numOfLec];
+                name= new String[numOfLec];
+                time1 = new String[numOfLec];
+                time2 = new String[numOfLec];
+                beaconID = new String[numOfLec];
+
+                for (int i = 0; i < numOfLec; i++) {
+                    JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
+                    lectureNum[i] = tmp.getString("id_lectures");
+                    name[i] = tmp.getString("name_lectures");
+                    time1[i] = tmp.getString("start");
+                    time2[i] = tmp.getString("end");
+                    beaconID[i] = tmp.getString("id_beacon");
+                    Log.d("lecnum",lectureNum[i]);
+                    Log.d("name", name[i]);
+                    Log.d("time1", time1[i]);
+                    Log.d("time2", time2[i]);
+                    Log.d("beaconID", beaconID[i]);
+                }
+
+                ListActivity.CustomList adapter = new ListActivity.CustomList(ListActivity.this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                        intent.putExtra("lectureNum", lectureNum[position]);
+                        startActivity(intent);
+                    }
+                });
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+        }
+
     }
 
 }
