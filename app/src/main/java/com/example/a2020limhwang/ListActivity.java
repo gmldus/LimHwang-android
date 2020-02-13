@@ -1,9 +1,13 @@
 package com.example.a2020limhwang;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -18,6 +22,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.altbeacon.beacon.BeaconManager;
+import org.altbeacon.beacon.BeaconParser;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,6 +42,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+
+import static com.example.a2020limhwang.BeaconService.MY_PERMISSIONS;
 
 public class ListActivity extends AppCompatActivity {
 
@@ -57,6 +65,7 @@ public class ListActivity extends AppCompatActivity {
     private String str_result;
     int numOfLec;
     String[] lectureNum, name, time1, time2, beaconID;
+    private BeaconManager beaconManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +79,27 @@ public class ListActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
-        new JSONTask().execute("http://172.30.1.45:3000/lectures/get");
+        new JSONTask().execute("http://192.168.0.43:3000/lectures/get");
 
+        beaconManager = BeaconManager.getInstanceForApplication(this);
+
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                        MY_PERMISSIONS);
+            }
+        } else { }
+
+        beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+
+        Intent A = new Intent(ListActivity.this,BeaconService.class);
+        startService(A);
 
     }
 
