@@ -57,14 +57,15 @@ public class BeaconService extends Service {
     private List<Beacon> beaconList = new ArrayList<>();
     BeaconService.MyTimer myTimer;
     int timerState = 0;
-    int attState = 0;
+    int attState, num = 0;
     long now;
     Date dateNow;
     SimpleDateFormat dateFormat, allFormat;
     String timeNow;
     String start, end;
+    String start_text, end_text;
     Date dateStart, dateEnd;
-    final Region region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null,null);
+    Region region;
     String[] startTime, endTime, beaconID;
 
     public IBinder onBind(Intent intent){
@@ -98,7 +99,7 @@ public class BeaconService extends Service {
 
     public int onStartCommand(Intent intent, int flags, int startId){
 
-        int num = intent.getIntExtra("numOfLec",0);
+        num = intent.getIntExtra("numOfLec",0);
 
         startTime = new String[num];
         endTime = new String[num];
@@ -186,64 +187,73 @@ public class BeaconService extends Service {
             end = "2020-02-13 22:50:00";
             Date currentTime = Calendar.getInstance().getTime();
             String date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
-            date_text=date_text.concat(" "+startTime[0]);
+            //date_text=date_text.concat(" "+startTime[0]);
             Log.d("webnautes", date_text);
 
             try {
-                dateStart = allFormat.parse(start);
-                dateEnd = allFormat.parse(end);
-                //log
-                Log.d("log date start", dateStart.toString());
-                Log.d("log date end", dateEnd.toString());
+                for (int i = 0;i<num; i++){
+                    start_text = date_text.concat(" "+startTime[i]);
+                    end_text = date_text.concat(" "+endTime[i]);
+                    dateStart = allFormat.parse(start_text);
+                    dateEnd = allFormat.parse(end_text);
 
-                long gapStart = dateNow.getTime() - dateStart.getTime();
-                long gapEnd = dateNow.getTime() - dateEnd.getTime();
+                    //log
+                    Log.d("log date start", dateStart.toString());
+                    Log.d("log date end", dateEnd.toString());
 
-                gapStart /= 60000;
-                gapEnd /= 60000;
+                    long gapStart = dateNow.getTime() - dateStart.getTime();
+                    long gapEnd = dateNow.getTime() - dateEnd.getTime();
 
-                //log
-                Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
-                Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
-                Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
+                    gapStart /= 60000;
+                    gapEnd /= 60000;
 
-                Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
-                Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
-                //log
-                Log.d("log gap start", Long.toString(gapStart));
-                Log.d("log gap end", Long.toString(gapEnd));
+                    //log
+                    Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
+                    Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
+                    Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
 
-                if (gapStart >= -10 && gapEnd <= 0) {
-                    if (attState == 0 && gapStart > 10 && gapEnd < -10) {
-                        Log.d("if", "1");
-                        attState = 2;
-                        //textView3.setText("2. 지각");
-                        try {
-                            Log.d("start", "지각 start");
-                            beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
-                            beaconManager.startMonitoringBeaconsInRegion(region);
-                        } catch (RemoteException e) {
+                    Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
+                    Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
+                    //log
+                    Log.d("log gap start", Long.toString(gapStart));
+                    Log.d("log gap end", Long.toString(gapEnd));
+
+                    if (gapStart >= -10 && gapEnd <= 0) {
+                        region = new Region("myBeacons", Identifier.parse(beaconID[i]), null,null);
+
+                        if (attState == 0 && gapStart > 10 && gapEnd < -10) {
+
+                            Log.d("if", "1");
+                            attState = 2;
+                            //textView3.setText("2. 지각");
+                            try {
+                                Log.d("start", "지각 start");
+                                beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
+                                beaconManager.startMonitoringBeaconsInRegion(region);
+                            } catch (RemoteException e) {
+                            }
+                        } else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
+                            Log.d("if", "2");
+                            attState = 1;
+                            //textView3.setText("1. 출석");
+                            try {
+                                beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
+                                beaconManager.startMonitoringBeaconsInRegion(region);
+                                Log.d("start", "출석 start");
+                            } catch (RemoteException e) {
+                            }
+                        } else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
+                            Log.d("if", "결석 3");
+                            attState = 3;
+                            //textView3.setText("3. 결석");
+                        } else if(gapEnd == 0){  //initialize
+                            //new JSONTask().execute("http://192.168.0.43:3000/attendances/update");
+                            attState = 0;
+                            timerState = 0;
                         }
-                    } else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
-                        Log.d("if", "2");
-                        attState = 1;
-                        //textView3.setText("1. 출석");
-                        try {
-                            beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
-                            beaconManager.startMonitoringBeaconsInRegion(region);
-                            Log.d("start", "출석 start");
-                        } catch (RemoteException e) {
-                        }
-                    } else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
-                        Log.d("if", "결석 3");
-                        attState = 3;
-                        //textView3.setText("3. 결석");
-                    } else if(gapEnd == 0){  //initialize
-                        //new JSONTask().execute("http://192.168.0.43:3000/attendances/update");
-                        attState = 0;
-                        timerState = 0;
                     }
                 }
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
