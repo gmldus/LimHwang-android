@@ -101,9 +101,8 @@ public class BeaconService extends Service {
         t1 = new String[num];
         t2 = new String[num];
 
-        t1 = intent.getStringArrayExtra("time1");
-        t2 = intent.getStringArrayExtra("time2");
-        
+        t1 = intent.getStringArrayExtra("startTime");
+        t2 = intent.getStringArrayExtra("endTime");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         myTimer = new BeaconService.MyTimer(20000, 1000);

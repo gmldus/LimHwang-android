@@ -64,7 +64,7 @@ public class ListActivity extends AppCompatActivity {
     };
     private String str_result;
     int numOfLec;
-    String[] lectureNum, name, time1, time2, beaconID;
+    String[] lectureNum, name, startTime, endTime, beaconID;
     private BeaconManager beaconManager;
 
     @Override
@@ -102,8 +102,8 @@ public class ListActivity extends AppCompatActivity {
             TextView tv_percentage = rowView.findViewById(R.id.percentage);
 
             tv_name.setText(name[position]);
-            tv_time1.setText(time1[position]);
-            tv_time2.setText(time2[position]);
+            tv_time1.setText(startTime[position]);
+            tv_time2.setText(endTime[position]);
             tv_percentage.setText(percentage[position] + "%");
 
             if (percentage[position] <= 75) {
@@ -209,21 +209,21 @@ public class ListActivity extends AppCompatActivity {
 
                 lectureNum =new String[numOfLec];
                 name= new String[numOfLec];
-                time1 = new String[numOfLec];
-                time2 = new String[numOfLec];
+                startTime = new String[numOfLec];
+                endTime = new String[numOfLec];
                 beaconID = new String[numOfLec];
 
                 for (int i = 0; i < numOfLec; i++) {
                     JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
                     lectureNum[i] = tmp.getString("id_lectures");
                     name[i] = tmp.getString("name_lectures");
-                    time1[i] = tmp.getString("start");
-                    time2[i] = tmp.getString("end");
+                    startTime[i] = tmp.getString("start");
+                    endTime[i] = tmp.getString("end");
                     beaconID[i] = tmp.getString("id_beacon");
                     Log.d("lecnum",lectureNum[i]);
                     Log.d("name", name[i]);
-                    Log.d("time1", time1[i]);
-                    Log.d("time2", time2[i]);
+                    Log.d("time1", startTime[i]);
+                    Log.d("time2", endTime[i]);
                     Log.d("beaconID", beaconID[i]);
                 }
 
@@ -239,8 +239,8 @@ public class ListActivity extends AppCompatActivity {
                 });
 
                 Intent A = new Intent(ListActivity.this,BeaconService.class);
-                A.putExtra("time1",time1);
-                A.putExtra("time2",time2);
+                A.putExtra("startTime",startTime);
+                A.putExtra("endTime",endTime);
                 A.putExtra("numOfLec",numOfLec);
                 startService(A);
 
