@@ -241,6 +241,7 @@ public class ListActivity extends AppCompatActivity {
                 Intent A = new Intent(ListActivity.this,BeaconService.class);
                 A.putExtra("startTime",startTime);
                 A.putExtra("endTime",endTime);
+                A.putExtra("beaconID",beaconID);
                 A.putExtra("numOfLec",numOfLec);
                 startService(A);
 

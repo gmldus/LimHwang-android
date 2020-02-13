@@ -63,7 +63,7 @@ public class BeaconService extends Service {
     String start, end;
     Date dateStart, dateEnd;
     final Region region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null,null);
-    String[] t1, t2;
+    String[] startTime, endTime, beaconID;
 
     public IBinder onBind(Intent intent){
         return null;
@@ -98,11 +98,13 @@ public class BeaconService extends Service {
 
         int num = intent.getIntExtra("numOfLec",0);
 
-        t1 = new String[num];
-        t2 = new String[num];
+        startTime = new String[num];
+        endTime = new String[num];
+        beaconID = new String[num];
 
-        t1 = intent.getStringArrayExtra("startTime");
-        t2 = intent.getStringArrayExtra("endTime");
+        startTime = intent.getStringArrayExtra("startTime");
+        endTime = intent.getStringArrayExtra("endTime");
+        beaconID = intent.getStringArrayExtra("beaconID");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         myTimer = new BeaconService.MyTimer(20000, 1000);
