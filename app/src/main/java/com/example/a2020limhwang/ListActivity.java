@@ -82,20 +82,6 @@ public class ListActivity extends AppCompatActivity {
         new JSONTask().execute("http://192.168.0.43:3000/lectures/get");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                        MY_PERMISSIONS);
-            }
-        } else { }
-
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
 
         Intent A = new Intent(ListActivity.this,BeaconService.class);
