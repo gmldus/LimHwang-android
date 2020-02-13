@@ -44,9 +44,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class BeaconService extends Service {
     public static final String TAG = "BeaconsEverywhere";
@@ -178,8 +180,14 @@ public class BeaconService extends Service {
             Log.d("log now", timeNow);
             Log.d("log dateNow", dateNow.toString());
             Log.d("timeNow", timeNow);
-            start = "2020-02-13 20:37:00";
-            end = "2020-02-13 21:50:00";
+
+            //여기서 start와 end값 한쌍 채택 (가까운 범위안에 드는 애들로)
+            start = "2020-02-13 21:37:00";
+            end = "2020-02-13 22:50:00";
+            Date currentTime = Calendar.getInstance().getTime();
+            String date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
+            date_text=date_text.concat(" "+startTime[0]);
+            Log.d("webnautes", date_text);
 
             try {
                 dateStart = allFormat.parse(start);
