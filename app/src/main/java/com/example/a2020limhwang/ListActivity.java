@@ -84,9 +84,6 @@ public class ListActivity extends AppCompatActivity {
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
 
-        Intent A = new Intent(ListActivity.this,BeaconService.class);
-        startService(A);
-
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -240,6 +237,13 @@ public class ListActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                 });
+
+                Intent A = new Intent(ListActivity.this,BeaconService.class);
+                A.putExtra("time1",time1);
+                A.putExtra("time2",time2);
+                A.putExtra("numOfLec",numOfLec);
+                startService(A);
+
             }catch (JSONException e) {
                 e.printStackTrace();
             }
