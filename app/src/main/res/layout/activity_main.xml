@@ -36,7 +36,7 @@
             android:layout_height="40dp"
             android:hint="초기 비밀번호를 입력하세요"
             android:textSize="15sp"
-            android:inputType="number"
+            android:inputType="numberPassword"
             android:singleLine="true"
             android:fontFamily="@font/nanumsquare_light"/>
 

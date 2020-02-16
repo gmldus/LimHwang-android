@@ -41,9 +41,10 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/textView_lectureName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="알고리즘"
+            android:text="(수업명)"
             android:textSize="20pt"
             android:textColor="@android:color/white"
             android:textStyle="bold"

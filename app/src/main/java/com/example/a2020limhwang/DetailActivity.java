@@ -39,24 +39,13 @@ public class DetailActivity extends AppCompatActivity {
 
     Button back, profile, btn_edit;
     ListView listView;
-    TextView text_percentage;
+    TextView text_percentage, textview_lectureName;
     int numOfAtt;
     private SharedPreferences sharedPreferences;
-    String lecture, id_students, str_result;
-    String[] date,state, name, lectureNum;
+    String lecture, id_students, str_result, lectureName;
+    String[] date,state, name, lectureNum, checktime;
 
-    String[] checktime = {
-            "O",
-            "Global ",
-            "Mechanical  ",
-            "German  & ",
-            " & Media",
-            "Software ",
-            "  ",
-            "",
-            "",
-            "Public "
-    };
+
 
 
     @Override
@@ -66,20 +55,20 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         lecture = intent.getExtras().getString("lectureNum");
+        lectureName = intent.getStringExtra("lectureName");
 
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         btn_edit = findViewById(R.id.btn_edit);
-
         listView= findViewById(R.id.list_detail);
         text_percentage = findViewById(R.id.text_percentage);
+        textview_lectureName = findViewById(R.id.textView_lectureName);
+        textview_lectureName.setText(lectureName);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         id_students = sharedPreferences.getString("id_students", "");
 
         new JSONTask().execute("http://172.30.1.29:3000/attendances/get");
-
-
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -198,6 +187,7 @@ public class DetailActivity extends AppCompatActivity {
                 lectureNum = new String[numOfAtt];
                 date = new String[numOfAtt];
                 state = new String[numOfAtt];
+                checktime = new String[numOfAtt];
 
                 for (int i = 0; i < numOfAtt; i++) {
                     JSONObject tmp = (JSONObject)attendanceInfoArray.get(i);
@@ -205,11 +195,13 @@ public class DetailActivity extends AppCompatActivity {
                     lectureNum[i] = tmp.getString("id_lectures");
                     date[i] = tmp.getString("date");
                     state[i] = tmp.getString("state");
+                    checktime[i] = tmp.getString("check_time");
 
                     Log.d("name", name[i]);
                     Log.d("lectureNum", lectureNum[i]);
                     Log.d("date", date[i]);
                     Log.d("state", state[i]);
+                    Log.d("checktime", checktime[i]);
                 }
 
                 CustomList adapter = new CustomList(DetailActivity.this);

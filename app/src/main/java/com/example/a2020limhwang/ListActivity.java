@@ -64,7 +64,7 @@ public class ListActivity extends AppCompatActivity {
     };
     private String str_result;
     int numOfLec;
-    String[] lectureNum, name, startTime, endTime, beaconID;
+    String[] lectureNum, lectureName, startTime, endTime, beaconID;
     private BeaconManager beaconManager;
 
     @Override
@@ -89,7 +89,7 @@ public class ListActivity extends AppCompatActivity {
     public class CustomList extends ArrayAdapter<String> {
         private final Activity context;
         public CustomList(Activity context ) {
-            super(context, R.layout.item, name);
+            super(context, R.layout.item, lectureName);
             this.context = context;
         }
         @Override
@@ -101,7 +101,7 @@ public class ListActivity extends AppCompatActivity {
             TextView tv_time2 = rowView.findViewById(R.id.time2);
             TextView tv_percentage = rowView.findViewById(R.id.percentage);
 
-            tv_name.setText(name[position]);
+            tv_name.setText(lectureName[position]);
             tv_time1.setText(startTime[position]);
             tv_time2.setText(endTime[position]);
             tv_percentage.setText(percentage[position] + "%");
@@ -208,7 +208,7 @@ public class ListActivity extends AppCompatActivity {
                 numOfLec = lectureInfoArray.length();
 
                 lectureNum =new String[numOfLec];
-                name= new String[numOfLec];
+                lectureName= new String[numOfLec];
                 startTime = new String[numOfLec];
                 endTime = new String[numOfLec];
                 beaconID = new String[numOfLec];
@@ -216,12 +216,12 @@ public class ListActivity extends AppCompatActivity {
                 for (int i = 0; i < numOfLec; i++) {
                     JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
                     lectureNum[i] = tmp.getString("id_lectures");
-                    name[i] = tmp.getString("name_lectures");
+                    lectureName[i] = tmp.getString("name_lectures");
                     startTime[i] = tmp.getString("start");
                     endTime[i] = tmp.getString("end");
                     beaconID[i] = tmp.getString("id_beacon");
                     Log.d("lecnum",lectureNum[i]);
-                    Log.d("name", name[i]);
+                    Log.d("name", lectureName[i]);
                     Log.d("time1", startTime[i]);
                     Log.d("time2", endTime[i]);
                     Log.d("beaconID", beaconID[i]);
@@ -234,6 +234,7 @@ public class ListActivity extends AppCompatActivity {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         Intent intent = new Intent(ListActivity.this, DetailActivity.class);
                         intent.putExtra("lectureNum", lectureNum[position]);
+                        intent.putExtra("lectureName", lectureName[position]);
                         startActivity(intent);
                     }
                 });
