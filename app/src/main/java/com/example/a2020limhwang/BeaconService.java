@@ -220,7 +220,7 @@ public class BeaconService extends Service {
 
 
 
-                    if (gapStart >= -10 && gapEnd <= 0) {
+                    if (gapStart >= 0 && gapEnd <= 0) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
@@ -251,7 +251,7 @@ public class BeaconService extends Service {
 
                             } catch (RemoteException e) {
                             }
-                        } else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
+                        } else if (attState == 0 && gapStart >= 0 && gapStart <= 10) {
                             Log.d("if", "2");
                             attState = 1;
                             //textView3.setText("1. 출석");
@@ -268,6 +268,7 @@ public class BeaconService extends Service {
                         } else if(gapEnd == 0){  //initialize
                             if (postState == 0) {
                                 postState = 1;
+                                if (attState == 0) attState = 3;
                                 new JSONTask().execute("http://172.30.1.29:3000/attendances/update");
                             }
                         }
@@ -385,6 +386,7 @@ public class BeaconService extends Service {
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             attState = 0;
             timerState = 0;
+            postState = 0;
         }
 
     }

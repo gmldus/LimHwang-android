@@ -145,7 +145,6 @@ public class MainActivity extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return null;
         }
 
@@ -176,6 +175,8 @@ public class MainActivity extends AppCompatActivity {
                         Log.d("key",studentKeyList.get(j));
                         Log.d("value",studentValueList.get(j));
                     }
+
+
                     editor.commit();
 
                     lectureNum = new String[lectureInfoArray.length()];
@@ -193,8 +194,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("lectureNum", lectureNum);
                 startActivity(intent);
             }
-
         }
-
     }
 }
