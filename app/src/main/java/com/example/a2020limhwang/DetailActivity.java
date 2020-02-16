@@ -43,9 +43,7 @@ public class DetailActivity extends AppCompatActivity {
     int numOfAtt;
     private SharedPreferences sharedPreferences;
     String lecture, id_students, str_result, lectureName;
-    String[] date,state, name, lectureNum, checktime;
-
-
+    String[] date, name, lectureNum, state, checktime;
 
 
     @Override
@@ -190,32 +188,31 @@ public class DetailActivity extends AppCompatActivity {
                 state = new String[numOfAtt];
                 checktime = new String[numOfAtt];
 
-
                 for (int i = 0; i < numOfAtt; i++) {
                     JSONObject tmp = (JSONObject)attendanceInfoArray.get(i);
                     name[i] = tmp.getString("id_students");
                     lectureNum[i] = tmp.getString("id_lectures");
                     date[i] = tmp.getString("date");
-                    //state[i] = tmp.getString("state");
+                    state[i] = tmp.getString("state");
                     checktime[i] = tmp.getString("check_time");
 
-                    if(tmp.getString("state") == "0"){
+                    if(Integer.parseInt(state[i]) == 0){
                         state[i] = "미정";
                     }
-                    else if(tmp.getString("state") == "1"){
+                    else if(Integer.parseInt(state[i]) == 1){
                         state[i] = "출석";
                     }
-                    else if(tmp.getString("state") == "2"){
+                    else if(Integer.parseInt(state[i]) == 2){
                         state[i] = "지각";
                     }
-                    else if(tmp.getString("state") == "3"){
+                    else if(Integer.parseInt(state[i])== 3){
                         state[i] = "결석";
                     }
 
                     Log.d("name", name[i]);
                     Log.d("lectureNum", lectureNum[i]);
                     Log.d("date", date[i]);
-                    Log.d("state", state[i]);
+                    //Log.d("state", state[i]);
                     Log.d("checktime", checktime[i]);
                 }
 
