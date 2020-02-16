@@ -62,16 +62,16 @@ public class BeaconService extends Service {
     int attState, num = 0;
     long now;
     Date dateNow;
-    SimpleDateFormat dateFormat, allFormat;
+    SimpleDateFormat timeFormat, allFormat;
     String id_students;
-    String timeNow;
+    String timeNow, checkTime;
     String start, end;
     String start_text, end_text, date_text;
     Date dateStart, dateEnd, currentTime;
     Region region;
     String[] startTime, endTime, beaconID, lectureNum;
     int index;
-    int postState = 0;
+    int postState = 0, isChecked = 0;
 
     public IBinder onBind(Intent intent){
         return null;
@@ -185,9 +185,9 @@ public class BeaconService extends Service {
             //textView.setText(s);
             now = System.currentTimeMillis();
             dateNow = new Date(now);
-            dateFormat = new SimpleDateFormat("HH:mm:ss");
+            timeFormat = new SimpleDateFormat("HH:mm:ss");
             allFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            timeNow = dateFormat.format(dateNow);
+            timeNow = timeFormat.format(dateNow);
             //log
             Log.d("log now", timeNow);
             Log.d("log dateNow", dateNow.toString());
@@ -222,6 +222,10 @@ public class BeaconService extends Service {
 
                     if (gapStart >= -10 && gapEnd <= 0) {
                         index = i;
+                        if (isChecked == 0) {
+                            isChecked = 1;
+                            checkTime = timeNow;
+                        }
 
                         //log
                         Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
@@ -315,6 +319,7 @@ public class BeaconService extends Service {
                 jsonObject.accumulate("id_lectures", Integer.parseInt(lectureNum[index]));
                 jsonObject.accumulate("date", date_text.substring(0, 10));
                 jsonObject.accumulate("state", attState);
+                jsonObject.accumulate("check_time", checkTime);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
