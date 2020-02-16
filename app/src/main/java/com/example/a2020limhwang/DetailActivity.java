@@ -46,16 +46,16 @@ public class DetailActivity extends AppCompatActivity {
     String[] date,state, name, lectureNum;
 
     String[] checktime = {
-            "Orchestral Instruments",
-            "Global Cooperation",
-            "Mechanical Systems Engineering",
-            "German Language & Culture",
-            "Communication & Media",
-            "Software Convergence",
-            "Visual & Media Design",
-            "Composition",
-            "Piano",
-            "Public Administration"
+            "O",
+            "Global ",
+            "Mechanical  ",
+            "German  & ",
+            " & Media",
+            "Software ",
+            "  ",
+            "",
+            "",
+            "Public "
     };
 
 

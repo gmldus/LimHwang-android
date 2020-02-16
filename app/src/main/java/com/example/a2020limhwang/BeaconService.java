@@ -266,8 +266,6 @@ public class BeaconService extends Service {
                                 postState = 1;
                                 new JSONTask().execute("http://172.30.1.29:3000/attendances/update");
                             }
-                            attState = 0;
-                            timerState = 0;
                         }
                     }
                 }
@@ -379,6 +377,8 @@ public class BeaconService extends Service {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            attState = 0;
+            timerState = 0;
         }
 
     }
