@@ -39,11 +39,11 @@ public class DetailActivity extends AppCompatActivity {
 
     Button back, profile, btn_edit;
     ListView listView;
-    TextView text_percentage, textview_lectureName;
+    TextView text_percentage, text_lectureName;
     int numOfAtt;
     private SharedPreferences sharedPreferences;
     String lecture, id_students, str_result, lectureName;
-    String[] date,state, name, lectureNum, checktime;
+    String[] date,state, name, lectureNum, checkTime;
 
 
 
@@ -62,8 +62,8 @@ public class DetailActivity extends AppCompatActivity {
         btn_edit = findViewById(R.id.btn_edit);
         listView= findViewById(R.id.list_detail);
         text_percentage = findViewById(R.id.text_percentage);
-        textview_lectureName = findViewById(R.id.textView_lectureName);
-        textview_lectureName.setText(lectureName);
+        text_lectureName = findViewById(R.id.textView_lectureName);
+        text_lectureName.setText(lectureName);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         id_students = sharedPreferences.getString("id_students", "");
@@ -87,7 +87,7 @@ public class DetailActivity extends AppCompatActivity {
 
 
             tv_date.setText(date[position]);
-            tv_checktime.setText(checktime[position]);
+            tv_checktime.setText(checkTime[position]);
             tv_state.setText(state[position]);
 
 
@@ -188,7 +188,7 @@ public class DetailActivity extends AppCompatActivity {
                 lectureNum = new String[numOfAtt];
                 date = new String[numOfAtt];
                 state = new String[numOfAtt];
-                checktime = new String[numOfAtt];
+                checkTime = new String[numOfAtt];
 
 
                 for (int i = 0; i < numOfAtt; i++) {
@@ -197,7 +197,7 @@ public class DetailActivity extends AppCompatActivity {
                     lectureNum[i] = tmp.getString("id_lectures");
                     date[i] = tmp.getString("date");
                     //state[i] = tmp.getString("state");
-                    checktime[i] = tmp.getString("check_time");
+                    checkTime[i] = tmp.getString("check_time");
 
                     if(tmp.getString("state") == "0"){
                         state[i] = "미정";
@@ -216,7 +216,7 @@ public class DetailActivity extends AppCompatActivity {
                     Log.d("lectureNum", lectureNum[i]);
                     Log.d("date", date[i]);
                     Log.d("state", state[i]);
-                    Log.d("checktime", checktime[i]);
+                    Log.d("checktime", checkTime[i]);
                 }
 
                 CustomList adapter = new CustomList(DetailActivity.this);
