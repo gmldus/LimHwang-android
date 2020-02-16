@@ -85,6 +85,7 @@ public class DetailActivity extends AppCompatActivity {
             TextView tv_checktime = (TextView) rowView.findViewById(R.id.checktime);
             TextView tv_state = (TextView) rowView.findViewById(R.id.state);
 
+
             tv_date.setText(date[position]);
             tv_checktime.setText(checktime[position]);
             tv_state.setText(state[position]);
@@ -189,13 +190,27 @@ public class DetailActivity extends AppCompatActivity {
                 state = new String[numOfAtt];
                 checktime = new String[numOfAtt];
 
+
                 for (int i = 0; i < numOfAtt; i++) {
                     JSONObject tmp = (JSONObject)attendanceInfoArray.get(i);
                     name[i] = tmp.getString("id_students");
                     lectureNum[i] = tmp.getString("id_lectures");
                     date[i] = tmp.getString("date");
-                    state[i] = tmp.getString("state");
+                    //state[i] = tmp.getString("state");
                     checktime[i] = tmp.getString("check_time");
+
+                    if(tmp.getString("state") == "0"){
+                        state[i] = "미정";
+                    }
+                    else if(tmp.getString("state") == "1"){
+                        state[i] = "출석";
+                    }
+                    else if(tmp.getString("state") == "2"){
+                        state[i] = "지각";
+                    }
+                    else if(tmp.getString("state") == "3"){
+                        state[i] = "결석";
+                    }
 
                     Log.d("name", name[i]);
                     Log.d("lectureNum", lectureNum[i]);
