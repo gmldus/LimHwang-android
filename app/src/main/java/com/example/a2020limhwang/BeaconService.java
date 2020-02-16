@@ -302,6 +302,7 @@ public class BeaconService extends Service {
         @Override
         public void onFinish() {
             //textView3.setText("결석");
+            attState=3;
             //결석처리
         }
     }
