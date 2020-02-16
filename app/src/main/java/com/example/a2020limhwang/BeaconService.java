@@ -70,7 +70,7 @@ public class BeaconService extends Service {
     Date dateStart, dateEnd, currentTime;
     Region region;
     String[] startTime, endTime, beaconID, lectureNum;
-    int index;
+    int index, tmp;
     int postState = 0, isChecked = 0;
 
     public IBinder onBind(Intent intent){
@@ -158,13 +158,19 @@ public class BeaconService extends Service {
                     beaconList.clear();
                     for (Beacon beacon : beacons) {
                         if (beacon.getDistance() < 1.0) {
-                            Log.d(TAG, "I see a beacon that is less than 1 meters away.");
+                            Log.d("비콘", "I see a beacon that is less than 1 meters away.");
                             beaconList.add(beacon);
                             timerState = 1;
                             myTimer.cancel();
+                            if (tmp == 1) {
+                                attState = 1;
+                            }
+                            else if (tmp == 2) {
+                                attState = 2;
+                            }
                         }
                         else{
-                            Log.d(TAG, "no beacon in range");
+                            Log.d("비콘", "no beacon in range");
                             if (timerState == 1) {
                                 myTimer.start();
                                 timerState = 0;
@@ -220,7 +226,7 @@ public class BeaconService extends Service {
 
 
 
-                    if (gapStart >= 0 && gapEnd <= 0) {
+                    if (gapStart >= 0 && gapEnd <= 1) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
@@ -239,38 +245,46 @@ public class BeaconService extends Service {
                         Log.d("log gap end", Long.toString(gapEnd));
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
                         Log.d("vsdfedcscsefd", Identifier.parse(beaconID[i]).toString());
-                        if (attState == 0 && gapStart > 10 && gapEnd < -10) {
-
-                            Log.d("if", "1");
-                            attState = 2;
-                            //textView3.setText("2. 지각");
-                            try {
-                                Log.d("start", "지각 start");
-                                beaconManager.startMonitoringBeaconsInRegion(region);
-                                beaconManager.startRangingBeaconsInRegion(region);
-
-                            } catch (RemoteException e) {
-                            }
-                        } else if (attState == 0 && gapStart >= 0 && gapStart <= 10) {
-                            Log.d("if", "2");
-                            attState = 1;
+                        if (attState == 0 && gapStart >= 0 && gapStart <= 10) {
+                            //attState = 1;
                             //textView3.setText("1. 출석");
                             try {
+                                tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
                                 Log.d("start", "출석 start");
                             } catch (RemoteException e) {
                             }
-                        } else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
-                            Log.d("if", "결석 3");
-                            attState = 3;
+                        }
+                        else if (attState == 0 && gapStart > 10 && gapEnd < -10) {
+                            //attState = 2;
+                            //textView3.setText("2. 지각");
+                            try {
+                                Log.d("start", "지각 start");
+                                tmp = 2;
+                                beaconManager.startMonitoringBeaconsInRegion(region);
+                                beaconManager.startRangingBeaconsInRegion(region);
+
+                            } catch (RemoteException e) {
+                            }
+                        }
+                        else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
+                            //attState = 3;
+                            tmp = 3;
                             //textView3.setText("3. 결석");
-                        } else if(gapEnd == 0){  //initialize
+                        }
+                        else if(gapEnd == 0){  //initialize
                             if (postState == 0) {
                                 postState = 1;
-                                if (attState == 0) attState = 3;
+                                if (attState == 0 || tmp == 3) {
+                                    attState = 3;
+                                    checkTime = "00:00:00";
+                                }
                                 new JSONTask().execute("http://172.30.1.29:3000/attendances/update");
                             }
+                        }
+                        else if (gapEnd == 1) {
+                            postState = 0;
                         }
                     }
                 }
@@ -386,7 +400,7 @@ public class BeaconService extends Service {
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             attState = 0;
             timerState = 0;
-            postState = 0;
+            isChecked = 0;
         }
 
     }
