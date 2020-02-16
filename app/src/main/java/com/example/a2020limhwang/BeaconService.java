@@ -6,6 +6,7 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.CountDownTimer;
@@ -55,18 +56,22 @@ public class BeaconService extends Service {
     public static final int MY_PERMISSIONS = 1;
     private BeaconManager beaconManager;
     private List<Beacon> beaconList = new ArrayList<>();
+    private SharedPreferences sharedPreferences;
     BeaconService.MyTimer myTimer;
     int timerState = 0;
     int attState, num = 0;
     long now;
     Date dateNow;
     SimpleDateFormat dateFormat, allFormat;
+    String id_students;
     String timeNow;
     String start, end;
-    String start_text, end_text;
-    Date dateStart, dateEnd;
+    String start_text, end_text, date_text;
+    Date dateStart, dateEnd, currentTime;
     Region region;
-    String[] startTime, endTime, beaconID;
+    String[] startTime, endTime, beaconID, lectureNum;
+    int index;
+    int postState = 0;
 
     public IBinder onBind(Intent intent){
         return null;
@@ -85,11 +90,16 @@ public class BeaconService extends Service {
             ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
 
         }
+
         Notification noti = new NotificationCompat.Builder(this, channelId)
                 .setContentTitle("hello")
                 .setContentText("this is beacon").build();
 
         startForeground(1, noti);
+
+        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        id_students = sharedPreferences.getString("id_students", "");
+
         handler.sendEmptyMessage(0);
     }
     public void onDestroy(){
@@ -108,6 +118,7 @@ public class BeaconService extends Service {
         startTime = intent.getStringArrayExtra("startTime");
         endTime = intent.getStringArrayExtra("endTime");
         beaconID = intent.getStringArrayExtra("beaconID");
+        lectureNum = intent.getStringArrayExtra("lectureNum");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         myTimer = new BeaconService.MyTimer(20000, 1000);
@@ -185,8 +196,8 @@ public class BeaconService extends Service {
             //여기서 start와 end값 한쌍 채택 (가까운 범위안에 드는 애들로)
             start = "2020-02-13 21:37:00";
             end = "2020-02-13 22:50:00";
-            Date currentTime = Calendar.getInstance().getTime();
-            String date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
+            currentTime = Calendar.getInstance().getTime();
+            date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
             //date_text=date_text.concat(" "+startTime[0]);
             Log.d("webnautes", date_text);
 
@@ -207,18 +218,21 @@ public class BeaconService extends Service {
                     gapStart /= 60000;
                     gapEnd /= 60000;
 
-                    //log
-                    Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
-                    Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
-                    Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
 
-                    Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
-                    Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
-                    //log
-                    Log.d("log gap start", Long.toString(gapStart));
-                    Log.d("log gap end", Long.toString(gapEnd));
 
                     if (gapStart >= -10 && gapEnd <= 0) {
+                        index = i;
+
+                        //log
+                        Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
+                        Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
+                        Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
+
+                        Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
+                        Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
+                        //log
+                        Log.d("log gap start", Long.toString(gapStart));
+                        Log.d("log gap end", Long.toString(gapEnd));
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
                         Log.d("vsdfedcscsefd", Identifier.parse(beaconID[i]).toString());
                         if (attState == 0 && gapStart > 10 && gapEnd < -10) {
@@ -248,7 +262,10 @@ public class BeaconService extends Service {
                             attState = 3;
                             //textView3.setText("3. 결석");
                         } else if(gapEnd == 0){  //initialize
-                            //new JSONTask().execute("http://192.168.0.43:3000/attendances/update");
+                            if (postState == 0) {
+                                postState = 1;
+                                new JSONTask().execute("http://172.30.1.29:3000/attendances/update");
+                            }
                             attState = 0;
                             timerState = 0;
                         }
@@ -292,7 +309,14 @@ public class BeaconService extends Service {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                //jsonObject.accumulate("array", Arrays.toString(lectureNum));
+                Log.d("id_students", id_students);
+                Log.d("id_lectures", lectureNum[index]);
+                Log.d("date", date_text.substring(0, 10));
+                Log.d("state", attState+"");
+                jsonObject.accumulate("id_students", Integer.parseInt(id_students));
+                jsonObject.accumulate("id_lectures", Integer.parseInt(lectureNum[index]));
+                jsonObject.accumulate("date", date_text.substring(0, 10));
+                jsonObject.accumulate("state", attState);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -354,46 +378,7 @@ public class BeaconService extends Service {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            /*Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            str_result = result+"";
-            try{
-                JSONObject jsonObject = new JSONObject(str_result);
-                JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
-                numOfLec = lectureInfoArray.length();
-
-                lectureNum =new String[numOfLec];
-                name= new String[numOfLec];
-                time1 = new String[numOfLec];
-                time2 = new String[numOfLec];
-                beaconID = new String[numOfLec];
-
-                for (int i = 0; i < numOfLec; i++) {
-                    JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
-                    lectureNum[i] = tmp.getString("id_lectures");
-                    name[i] = tmp.getString("name_lectures");
-                    time1[i] = tmp.getString("start");
-                    time2[i] = tmp.getString("end");
-                    beaconID[i] = tmp.getString("id_beacon");
-                    Log.d("lecnum",lectureNum[i]);
-                    Log.d("name", name[i]);
-                    Log.d("time1", time1[i]);
-                    Log.d("time2", time2[i]);
-                    Log.d("beaconID", beaconID[i]);
-                }
-
-                ListActivity.CustomList adapter = new ListActivity.CustomList(ListActivity.this);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-                        intent.putExtra("lectureNum", lectureNum[position]);
-                        startActivity(intent);
-                    }
-                });
-            }catch (JSONException e) {
-                e.printStackTrace();
-            }*/
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
         }
 
     }

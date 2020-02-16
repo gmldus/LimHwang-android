@@ -243,6 +243,7 @@ public class ListActivity extends AppCompatActivity {
                 A.putExtra("endTime",endTime);
                 A.putExtra("beaconID",beaconID);
                 A.putExtra("numOfLec",numOfLec);
+                A.putExtra("lectureNum", lectureNum);
                 startService(A);
 
             }catch (JSONException e) {
