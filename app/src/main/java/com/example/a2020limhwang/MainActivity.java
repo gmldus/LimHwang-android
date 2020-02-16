@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://192.168.0.43:3000/students/login");
+                new JSONTask().execute("http://172.30.1.29:3000/students/login");
             }
         });
     }

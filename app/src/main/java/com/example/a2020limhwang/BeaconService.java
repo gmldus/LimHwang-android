@@ -219,8 +219,8 @@ public class BeaconService extends Service {
                     Log.d("log gap end", Long.toString(gapEnd));
 
                     if (gapStart >= -10 && gapEnd <= 0) {
-                        region = new Region("myBeacons", Identifier.parse(beaconID[i]), null,null);
-
+                        region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
+                        Log.d("vsdfedcscsefd", Identifier.parse(beaconID[i]).toString());
                         if (attState == 0 && gapStart > 10 && gapEnd < -10) {
 
                             Log.d("if", "1");
@@ -228,8 +228,9 @@ public class BeaconService extends Service {
                             //textView3.setText("2. 지각");
                             try {
                                 Log.d("start", "지각 start");
-                                beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
                                 beaconManager.startMonitoringBeaconsInRegion(region);
+                                beaconManager.startRangingBeaconsInRegion(region);
+
                             } catch (RemoteException e) {
                             }
                         } else if (attState == 0 && gapStart >= -10 && gapStart <= 10) {
@@ -237,8 +238,8 @@ public class BeaconService extends Service {
                             attState = 1;
                             //textView3.setText("1. 출석");
                             try {
-                                beaconManager.startRangingBeaconsInRegion(new Region("myBeaons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), null, null));
                                 beaconManager.startMonitoringBeaconsInRegion(region);
+                                beaconManager.startRangingBeaconsInRegion(region);
                                 Log.d("start", "출석 start");
                             } catch (RemoteException e) {
                             }
