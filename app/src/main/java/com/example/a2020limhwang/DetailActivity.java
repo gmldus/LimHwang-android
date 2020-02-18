@@ -238,6 +238,7 @@ public class DetailActivity extends AppCompatActivity {
                 });
 
                 int score = numOfAtt / 4 - (cntAbs + (cntLate / 3));
+                if (score < 0) score = 0;
                 Log.d("score", score+"");
                 untilF.setText(score+"");
 
