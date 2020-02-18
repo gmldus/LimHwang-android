@@ -52,18 +52,7 @@ public class ListActivity extends AppCompatActivity {
     Button back, profile;
     ListView listView;
 
-    float[] percentage = {
-            90,
-            23,
-            34,
-            23,
-            45,
-            56,
-            86,
-            78,
-            45,
-            56
-    };
+    float[] percentage;
 
     private String str_result;
     int numOfLec;
@@ -222,6 +211,7 @@ public class ListActivity extends AppCompatActivity {
                 startTime = new String[numOfLec];
                 endTime = new String[numOfLec];
                 beaconID = new String[numOfLec];
+                percentage = new float[numOfLec];
 
                 for (int i = 0; i < numOfLec; i++) {
                     JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
