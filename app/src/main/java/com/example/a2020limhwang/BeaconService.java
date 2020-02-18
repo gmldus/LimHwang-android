@@ -432,7 +432,7 @@ public class BeaconService extends Service {
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
             if(attState==3){
-                
+
                 editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
                 editor.commit();
                 builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)+" 결석입니다") // required

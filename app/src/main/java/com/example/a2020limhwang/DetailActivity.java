@@ -252,7 +252,7 @@ public class DetailActivity extends AppCompatActivity {
 
                 if (score != updatedScore) {
                     score = updatedScore;
-                    editor.putString(lecture,lectureName); //강의번호로 강의 저장
+                    editor.putString(lecture,lectureName); //강의번호로 강의명 저장
                     editor.putInt(lectureName,score); //강의명으로 F까지 남은 횟수 저장
                     editor.commit();
                 }
