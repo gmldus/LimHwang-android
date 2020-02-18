@@ -57,6 +57,7 @@ public class BeaconService extends Service {
     private BeaconManager beaconManager;
     private List<Beacon> beaconList = new ArrayList<>();
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     BeaconService.MyTimer myTimer;
     int timerState = 0;
     int attState, num = 0;
@@ -98,6 +99,8 @@ public class BeaconService extends Service {
         startForeground(1, noti);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         id_students = sharedPreferences.getString("id_students", "");
 
         handler.sendEmptyMessage(0);
@@ -428,10 +431,7 @@ public class BeaconService extends Service {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            //int requestID = (int) System.currentTimeMillis();
-
-
-            builder.setContentTitle("결석") // required
+            builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)) // required
                     .setContentText("결석입니다")  // required
                     .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
                     .setAutoCancel(true) // 알림 터치시 반응 후 삭제

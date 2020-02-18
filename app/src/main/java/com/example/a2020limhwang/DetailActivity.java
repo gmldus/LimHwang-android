@@ -47,7 +47,10 @@ public class DetailActivity extends AppCompatActivity {
     ListView listView;
     TextView text_percentage, text_lectureName, untilF;
     int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;
+
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
     String lecture, id_students, str_result, lectureName;
     String[] date, name, lectureNum, state, checkTime;
     int score = -1;
@@ -73,11 +76,12 @@ public class DetailActivity extends AppCompatActivity {
         text_lectureName.setText(lectureName);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
         id_students = sharedPreferences.getString("id_students", "");
 
         new JSONTask().execute("http://172.30.1.23:3000/attendances/get");
-        //untilF.setText(numOfAtt / 4 - (cntAbs + (cntLate / 3)));
-        //untilF.setText(numOfAtt);
+
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -248,10 +252,8 @@ public class DetailActivity extends AppCompatActivity {
 
                 if (score != updatedScore) {
                     score = updatedScore;
-                    /*if (score < 4 && score >= 0) {
-                        //F까지 결석 3번 남았습니다.
-
-                    }*/
+                    editor.putString(lecture,lectureName); //강의번호로 강의명 저장
+                    editor.commit();
                 }/*
                 if (score != updatedScore) {
                     score = updatedScore;
