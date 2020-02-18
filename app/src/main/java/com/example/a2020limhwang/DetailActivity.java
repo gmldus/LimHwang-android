@@ -66,7 +66,7 @@ public class DetailActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         id_students = sharedPreferences.getString("id_students", "");
 
-        new JSONTask().execute("http://172.30.1.29:3000/attendances/get");
+        new JSONTask().execute("http://172.30.1.23:3000/attendances/get");
     }
 
     public class CustomList extends ArrayAdapter<String> {

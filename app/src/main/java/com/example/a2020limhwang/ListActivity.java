@@ -79,7 +79,7 @@ public class ListActivity extends AppCompatActivity {
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
-        new JSONTask().execute("http://172.30.1.29:3000/lectures/get");
+        new JSONTask().execute("http://172.30.1.23:3000/lectures/get");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));

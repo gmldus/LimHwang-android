@@ -73,12 +73,20 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
+        if(sharedPreferences.getString("id_students",null)!=null){
+            new JSONTask().execute("http://172.30.1.23:3000/students/login");
+        }
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                new JSONTask().execute("http://172.30.1.29:3000/students/login");
+                editor.putString("id",str_id);
+                editor.putString("pw",str_pw);
+                editor.commit();
+                //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
+                new JSONTask().execute("http://172.30.1.23:3000/students/login");
             }
         });
     }
@@ -88,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("login_id", str_id);
-                jsonObject.accumulate("login_password", str_pw);
+                jsonObject.accumulate("login_id", sharedPreferences.getString("id",null));
+                jsonObject.accumulate("login_password", sharedPreferences.getString("pw",null));
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -155,7 +163,6 @@ public class MainActivity extends AppCompatActivity {
             }
             else {
                 super.onPostExecute(result);
-                //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
 
                 str_result = result+"";
                 try{
