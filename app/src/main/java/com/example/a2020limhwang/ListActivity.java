@@ -320,7 +320,7 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result+"";
             try{
                 JSONObject jsonObject = new JSONObject(str_result);
