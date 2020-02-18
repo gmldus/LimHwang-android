@@ -245,9 +245,6 @@ public class DetailActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-
-
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

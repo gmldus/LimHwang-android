@@ -7,10 +7,12 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.JsonReader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +52,7 @@ public class ListActivity extends AppCompatActivity {
     Button back, profile;
     ListView listView;
 
-    Integer[] percentage = {
+    float[] percentage = {
             90,
             23,
             34,
@@ -67,6 +69,9 @@ public class ListActivity extends AppCompatActivity {
     int numOfLec;
     String[] lectureNum, lectureName, startTime, endTime, beaconID;
     private BeaconManager beaconManager;
+    private SharedPreferences sharedPreferences;
+    String id_students;
+    int state[][];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,12 +80,15 @@ public class ListActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         lectureNum = intent.getStringArrayExtra("lectureNum");
+        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        id_students = sharedPreferences.getString("id_students", "");
 
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         listView= findViewById(R.id.listView);
 
         new JSONTask().execute("http://172.30.1.23:3000/lectures/get");
+        new JSONTask2().execute("http://172.30.1.23:3000/attendances/count");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
@@ -105,6 +113,7 @@ public class ListActivity extends AppCompatActivity {
             tv_name.setText(lectureName[position]);
             tv_time1.setText(startTime[position]);
             tv_time2.setText(endTime[position]);
+
             tv_percentage.setText(percentage[position] + "%");
 
             if (percentage[position] <= 75) {
@@ -201,7 +210,7 @@ public class ListActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result+"";
             try{
                 JSONObject jsonObject = new JSONObject(str_result);
@@ -221,6 +230,7 @@ public class ListActivity extends AppCompatActivity {
                     startTime[i] = tmp.getString("start");
                     endTime[i] = tmp.getString("end");
                     beaconID[i] = tmp.getString("id_beacon");
+
                     Log.d("lecnum",lectureNum[i]);
                     Log.d("name", lectureName[i]);
                     Log.d("time1", startTime[i]);
@@ -247,6 +257,119 @@ public class ListActivity extends AppCompatActivity {
                 A.putExtra("numOfLec",numOfLec);
                 A.putExtra("lectureNum", lectureNum);
                 startService(A);
+
+            }catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    public class JSONTask2 extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... urls) {
+            try{
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.accumulate("id_students", id_students);
+
+                HttpURLConnection con = null;
+                BufferedReader reader = null;
+
+                try {
+                    URL url = new URL(urls[0]);
+
+                    con = (HttpURLConnection) url.openConnection();
+                    con.setRequestMethod("POST");
+                    con.setRequestProperty("Cache-Control", "no-cache");
+                    con.setRequestProperty("Content-Type", "application/json");
+                    con.setRequestProperty("Accept", "text/html");
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    con.connect();
+
+                    OutputStream outStream = con.getOutputStream();
+
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(outStream));
+                    writer.write(jsonObject.toString());
+                    writer.flush();
+                    writer.close();
+
+                    InputStream stream = con.getInputStream();
+
+                    reader = new BufferedReader(new InputStreamReader(stream));
+
+                    StringBuffer buffer = new StringBuffer();
+
+                    String line = "";
+                    while((line = reader.readLine()) != null){
+                        buffer.append(line);
+                    }
+
+                    return buffer.toString();
+                }catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }catch (IOException e) {
+                    e.printStackTrace();
+                }finally {
+                    if(con != null){
+                        con.disconnect();
+                    }
+                    try {
+                        if(reader != null){
+                            reader.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            super.onPostExecute(result);
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            str_result = result+"";
+            try{
+                JSONObject jsonObject = new JSONObject(str_result);
+                JSONArray lectureInfoArray = jsonObject.getJSONArray("data");
+                int len = lectureInfoArray.length();
+
+                state = new int[numOfLec][4];
+
+                for (int i = 0; i < len; i++) {
+                    JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
+                    String id_lec = tmp.getString("id_lectures");
+
+                    for (int j = 0; j < numOfLec; j++) {
+                        if (id_lec.equals(lectureNum[j])) {
+                            state[j][0]++;
+                            String s = tmp.getString("state");
+                            if (s.equals("1")) {
+                                state[j][1]++;
+                            }
+                            else if (s.equals("2")) {
+                                state[j][2]++;
+                            }
+                            else if (s.equals("3")) {
+                                state[j][3]++;
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < numOfLec; i++) {
+                    for (int j = 0; j < 4;j++) {
+                        Log.d("state" + i + " " + j, state[i][j]+"");
+                    }
+                    percentage[i] = 100 - ((float)state[i][1] / (float)state[i][0] * 100);
+                }
+
+
 
             }catch (JSONException e) {
                 e.printStackTrace();
