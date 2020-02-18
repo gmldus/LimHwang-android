@@ -39,8 +39,8 @@ public class DetailActivity extends AppCompatActivity {
 
     Button back, profile, btn_edit;
     ListView listView;
-    TextView text_percentage, text_lectureName;
-    int numOfAtt;
+    TextView text_percentage, text_lectureName, untilF;
+    int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;
     private SharedPreferences sharedPreferences;
     String lecture, id_students, str_result, lectureName;
     String[] date, name, lectureNum, state, checkTime;
@@ -61,12 +61,16 @@ public class DetailActivity extends AppCompatActivity {
         listView= findViewById(R.id.list_detail);
         text_percentage = findViewById(R.id.text_percentage);
         text_lectureName = findViewById(R.id.textView_lectureName);
+        untilF = findViewById(R.id.score_untilF);
+
         text_lectureName.setText(lectureName);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         id_students = sharedPreferences.getString("id_students", "");
 
         new JSONTask().execute("http://172.30.1.23:3000/attendances/get");
+        //untilF.setText(numOfAtt / 4 - (cntAbs + (cntLate / 3)));
+        //untilF.setText(numOfAtt);
     }
 
     public class CustomList extends ArrayAdapter<String> {
@@ -83,11 +87,9 @@ public class DetailActivity extends AppCompatActivity {
             TextView tv_checktime = (TextView) rowView.findViewById(R.id.checktime);
             TextView tv_state = (TextView) rowView.findViewById(R.id.state);
 
-
             tv_date.setText(date[position]);
             tv_checktime.setText(checkTime[position]);
             tv_state.setText(state[position]);
-
 
             return rowView;
         }
@@ -201,12 +203,15 @@ public class DetailActivity extends AppCompatActivity {
                     }
                     else if(Integer.parseInt(state[i]) == 1){
                         state[i] = "출석";
+                        cntAtt++;
                     }
                     else if(Integer.parseInt(state[i]) == 2){
                         state[i] = "지각";
+                        cntLate++;
                     }
                     else if(Integer.parseInt(state[i])== 3){
                         state[i] = "결석";
+                        cntAbs++;
                     }
 
                     Log.d("name", name[i]);
@@ -214,7 +219,13 @@ public class DetailActivity extends AppCompatActivity {
                     Log.d("date", date[i]);
                     //Log.d("state", state[i]);
                     Log.d("checktime", checkTime[i]);
+
                 }
+
+                Log.d("log all", numOfAtt+"");
+                Log.d("log att", cntAtt+"");
+                Log.d("log late", cntLate+"");
+                Log.d("log abs", cntAbs+"");
 
                 CustomList adapter = new CustomList(DetailActivity.this);
                 listView.setAdapter(adapter);
@@ -226,11 +237,16 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
+                int score = numOfAtt / 4 - (cntAbs + (cntLate / 3));
+                Log.d("score", score+"");
+                untilF.setText(score+"");
 
             }catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
+
 
     }
 

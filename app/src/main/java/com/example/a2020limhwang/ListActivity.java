@@ -62,6 +62,7 @@ public class ListActivity extends AppCompatActivity {
             45,
             56
     };
+
     private String str_result;
     int numOfLec;
     String[] lectureNum, lectureName, startTime, endTime, beaconID;

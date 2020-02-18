@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/text_untilF"
                     android:layout_margin="20dp"
-                    android:text="8"
+                    android:text="?"
                     android:textSize="20pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
