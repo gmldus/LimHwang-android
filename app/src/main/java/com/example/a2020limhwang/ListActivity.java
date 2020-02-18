@@ -114,7 +114,7 @@ public class ListActivity extends AppCompatActivity {
             tv_time1.setText(startTime[position]);
             tv_time2.setText(endTime[position]);
 
-            tv_percentage.setText(percentage[position] + "%");
+            tv_percentage.setText(Math.round(percentage[position]*10)/10.0 + "%");
 
             if (percentage[position] <= 75) {
                 tv_percentage.setTextColor(Color.parseColor("#CB333B"));
@@ -238,18 +238,6 @@ public class ListActivity extends AppCompatActivity {
                     Log.d("beaconID", beaconID[i]);
                 }
 
-                CustomList adapter = new CustomList(ListActivity.this);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
-                        intent.putExtra("lectureNum", lectureNum[position]);
-                        intent.putExtra("lectureName", lectureName[position]);
-                        startActivity(intent);
-                    }
-                });
-
                 Intent A = new Intent(ListActivity.this,BeaconService.class);
                 A.putExtra("startTime",startTime);
                 A.putExtra("endTime",endTime);
@@ -366,8 +354,23 @@ public class ListActivity extends AppCompatActivity {
                     for (int j = 0; j < 4;j++) {
                         Log.d("state" + i + " " + j, state[i][j]+"");
                     }
-                    percentage[i] = 100 - ((float)state[i][1] / (float)state[i][0] * 100);
+
+                    float whole = 100/state[i][0];
+                    float hun = 100;
+                    percentage[i] = hun-state[i][2]*(whole/3)-state[i][3]*whole;
                 }
+
+                CustomList adapter = new CustomList(ListActivity.this);
+                listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Intent intent = new Intent(ListActivity.this, DetailActivity.class);
+                        intent.putExtra("lectureNum", lectureNum[position]);
+                        intent.putExtra("lectureName", lectureName[position]);
+                        startActivity(intent);
+                    }
+                });
 
 
 
