@@ -13,6 +13,7 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
@@ -400,6 +401,16 @@ public class BeaconService extends Service {
 
         @Override
         protected void onPostExecute(String result) {
+
+            PowerManager powerManager;
+
+            PowerManager.WakeLock wakeLock;
+            powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
+
+            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
+
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             String channelId = "channel";
@@ -439,9 +450,12 @@ public class BeaconService extends Service {
                         .setContentText("F까지 결석횟수 "+sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)+"번 남았습니다")  // required
                         .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
                         .setAutoCancel(true) // 알림 터치시 반응 후 삭제
-                        .setSmallIcon(android.R.drawable.btn_star);
+                        .setSmallIcon(android.R.drawable.btn_star)
+                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
+                wakeLock.acquire();
                 notifManager.notify(0, builder.build());
+                wakeLock.release();
             }
 
             attState = 0;
