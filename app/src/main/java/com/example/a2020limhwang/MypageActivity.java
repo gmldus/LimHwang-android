@@ -12,6 +12,7 @@ import android.widget.TextView;
 public class MypageActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
     Button back;
     TextView student_major, student_number, student_name;
 
@@ -26,6 +27,7 @@ public class MypageActivity extends AppCompatActivity {
         student_name = findViewById(R.id.student_name);
 
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
         String major = sharedPreferences.getString("major", "");
         String number = sharedPreferences.getString("id_students", "");
         String name = sharedPreferences.getString("name_students", "");
@@ -41,8 +43,12 @@ public class MypageActivity extends AppCompatActivity {
         }
         else if (v.getId() == R.id.logoutButton) {
             Intent intent = new Intent (this, MainActivity.class);
+            editor.remove("id");
+            editor.remove("pw");
+            editor.commit();
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent);
         }
     }
