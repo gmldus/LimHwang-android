@@ -50,7 +50,7 @@ public class DetailActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     String lecture, id_students, str_result, lectureName;
     String[] date, name, lectureNum, state, checkTime;
-    int score;
+    int score = -1;
 
 
     @Override
@@ -246,24 +246,12 @@ public class DetailActivity extends AppCompatActivity {
 
                 int updatedScore = numOfAtt / 4 - (cntAbs + (cntLate / 3));
 
-                score = updatedScore;
-                if (score < 4 && score >= 0) {
-                    //F까지 결석 3번 남았습니다.
+                if (score != updatedScore) {
+                    score = updatedScore;
+                    /*if (score < 4 && score >= 0) {
+                        //F까지 결석 3번 남았습니다.
 
-                    String channelId = "com.codechacha.sample1";
-
-                    if (Build.VERSION.SDK_INT >= 26) {
-                        NotificationChannel channel = new NotificationChannel(
-                                channelId, "Android Test",
-                                NotificationManager.IMPORTANCE_DEFAULT
-                        );
-                        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
-                    }
-
-                    Notification noti = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                            .setContentTitle("F까지 결석" + score + "번 남았습니다.")
-                            .setContentText("강의이름").build();
+                    }*/
                 }/*
                 if (score != updatedScore) {
                     score = updatedScore;

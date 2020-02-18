@@ -285,6 +285,7 @@ public class BeaconService extends Service {
                         }
                         else if (gapEnd == 1) {
                             postState = 0;
+
                         }
                     }
                 }
@@ -398,6 +399,45 @@ public class BeaconService extends Service {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            String channelId = "channel";
+            String channelName = "Channel Name";
+
+            NotificationManager notifManager
+
+                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                NotificationChannel mChannel = new NotificationChannel(
+                        channelId, channelName, importance);
+
+                notifManager.createNotificationChannel(mChannel);
+
+            }
+
+            NotificationCompat.Builder builder =
+                    new NotificationCompat.Builder(getApplicationContext(), channelId);
+
+            Intent notificationIntent = new Intent(getApplicationContext()
+
+                    , MainActivity.class);
+
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            //int requestID = (int) System.currentTimeMillis();
+
+
+            builder.setContentTitle("결석") // required
+                    .setContentText("결석입니다")  // required
+                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                    .setSmallIcon(android.R.drawable.btn_star);
+
+            notifManager.notify(0, builder.build());
             attState = 0;
             timerState = 0;
             isChecked = 0;
