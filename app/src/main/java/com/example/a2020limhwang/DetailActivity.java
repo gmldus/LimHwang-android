@@ -1,8 +1,13 @@
 package com.example.a2020limhwang;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -34,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -44,6 +50,7 @@ public class DetailActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     String lecture, id_students, str_result, lectureName;
     String[] date, name, lectureNum, state, checkTime;
+    int score;
 
 
     @Override
@@ -217,7 +224,7 @@ public class DetailActivity extends AppCompatActivity {
                     Log.d("name", name[i]);
                     Log.d("lectureNum", lectureNum[i]);
                     Log.d("date", date[i]);
-                    //Log.d("state", state[i]);
+                    Log.d("state", state[i]);
                     Log.d("checktime", checkTime[i]);
 
                 }
@@ -237,7 +244,49 @@ public class DetailActivity extends AppCompatActivity {
                     }
                 });
 
-                int score = numOfAtt / 4 - (cntAbs + (cntLate / 3));
+                int updatedScore = numOfAtt / 4 - (cntAbs + (cntLate / 3));
+
+                score = updatedScore;
+                if (score < 4 && score >= 0) {
+                    //F까지 결석 3번 남았습니다.
+
+                    String channelId = "com.codechacha.sample1";
+
+                    if (Build.VERSION.SDK_INT >= 26) {
+                        NotificationChannel channel = new NotificationChannel(
+                                channelId, "Android Test",
+                                NotificationManager.IMPORTANCE_DEFAULT
+                        );
+                        ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+                    }
+
+                    Notification noti = new NotificationCompat.Builder(getApplicationContext(), channelId)
+                            .setContentTitle("F까지 결석" + score + "번 남았습니다.")
+                            .setContentText("강의이름").build();
+                }/*
+                if (score != updatedScore) {
+                    score = updatedScore;
+                    if (score < 4 && score >= 0) {
+                        //F까지 결석 3번 남았습니다.
+
+                        String channelId = "com.codechacha.sample1";
+
+                        if (Build.VERSION.SDK_INT >= 26) {
+                            NotificationChannel channel = new NotificationChannel(
+                                    channelId, "Android Test",
+                                    NotificationManager.IMPORTANCE_DEFAULT
+                            );
+                            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+
+                        }
+
+                        Notification noti = new NotificationCompat.Builder(getApplicationContext(), channelId)
+                                .setContentTitle("F까지 결석" + score + "번 남았습니다.")
+                                .setContentText("강의이름").build();
+                    }
+                }
+                */
                 if (score < 0) score = 0;
                 Log.d("score", score+"");
                 untilF.setText(score+"");
