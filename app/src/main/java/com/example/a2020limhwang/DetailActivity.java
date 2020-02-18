@@ -252,31 +252,11 @@ public class DetailActivity extends AppCompatActivity {
 
                 if (score != updatedScore) {
                     score = updatedScore;
-                    editor.putString(lecture,lectureName); //강의번호로 강의명 저장
+                    editor.putString(lecture,lectureName); //강의번호로 강의 저장
+                    editor.putInt(lectureName,score); //강의명으로 F까지 남은 횟수 저장
                     editor.commit();
-                }/*
-                if (score != updatedScore) {
-                    score = updatedScore;
-                    if (score < 4 && score >= 0) {
-                        //F까지 결석 3번 남았습니다.
-
-                        String channelId = "com.codechacha.sample1";
-
-                        if (Build.VERSION.SDK_INT >= 26) {
-                            NotificationChannel channel = new NotificationChannel(
-                                    channelId, "Android Test",
-                                    NotificationManager.IMPORTANCE_DEFAULT
-                            );
-                            ((NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(channel);
-
-                        }
-
-                        Notification noti = new NotificationCompat.Builder(getApplicationContext(), channelId)
-                                .setContentTitle("F까지 결석" + score + "번 남았습니다.")
-                                .setContentText("강의이름").build();
-                    }
                 }
-                */
+
                 if (score < 0) score = 0;
                 Log.d("score", score+"");
                 untilF.setText(score+"");

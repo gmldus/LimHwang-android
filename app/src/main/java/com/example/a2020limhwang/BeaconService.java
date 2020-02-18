@@ -431,13 +431,19 @@ public class BeaconService extends Service {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)) // required
-                    .setContentText("결석입니다")  // required
-                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
-                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
-                    .setSmallIcon(android.R.drawable.btn_star);
+            if(attState==3){
+                
+                editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
+                editor.commit();
+                builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)+" 결석입니다") // required
+                        .setContentText("F까지 결석횟수 "+sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)+"번 남았습니다")  // required
+                        .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                        .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                        .setSmallIcon(android.R.drawable.btn_star);
 
-            notifManager.notify(0, builder.build());
+                notifManager.notify(0, builder.build());
+            }
+
             attState = 0;
             timerState = 0;
             isChecked = 0;
