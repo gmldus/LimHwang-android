@@ -92,6 +92,8 @@
                 android:id="@+id/rate"
                 android:layout_width="70dp"
                 android:layout_height="40dp"
+                android:inputType="number"
+                android:singleLine="true"
                 android:background="@drawable/edit_text_border" />
 
 
@@ -100,7 +102,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="결석 : "
+            android:text="결석"
             android:textSize="25dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
@@ -123,6 +125,8 @@
                 android:id="@+id/input1"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
+                android:inputType="number"
+                android:singleLine="true"
                 android:background="@drawable/edit_text_border" />
             <TextView
                 android:layout_width="wrap_content"
@@ -147,6 +151,8 @@
                 android:id="@+id/input2"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
+                android:inputType="number"
+                android:singleLine="true"
                 android:background="@drawable/edit_text_border" />
             <TextView
                 android:layout_width="wrap_content"
@@ -158,53 +164,70 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="지각 : "
+            android:text="지각 점수 반영 방식"
             android:textSize="25dp"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/nanumsquare_light"/>
+
         <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <RadioButton
                     android:id="@+id/radio1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="지각 1회당 감점 점수 :  "
+                    android:text="지각 1회당 "
                     android:textSize="20dp"
                     android:fontFamily="@font/nanumsquare_light"/>
                 <EditText
                     android:id="@+id/input3"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
+                    android:inputType="number"
+                    android:singleLine="true"
                     android:background="@drawable/edit_text_border" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:fontFamily="@font/nanumsquare_light"
+                    android:text="점 감점" />
             </LinearLayout>
+
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
-                android:layout_marginBottom="10dp" >
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
                 <RadioButton
                     android:id="@+id/radio2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="지각 몇 회에 결석 1번인지 :  "
+                    android:text="지각 "
                     android:textSize="20dp"
                     android:fontFamily="@font/nanumsquare_light"/>
+
                 <EditText
+                    android:layout_gravity="center_horizontal"
                     android:id="@+id/input4"
                     android:layout_width="60dp"
                     android:layout_height="40dp"
+                    android:inputType="text"
+                    android:singleLine="true"
                     android:background="@drawable/edit_text_border" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20dp"
+                    android:fontFamily="@font/nanumsquare_light"
+                    android:text="회가 결석 1번과 같음" />
             </LinearLayout>
+
         </RadioGroup>
 
         <Button

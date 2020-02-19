@@ -74,7 +74,8 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         if(sharedPreferences.getString("id_students",null)!=null){
-            new JSONTask().execute("http://172.30.1.23:3000/students/login");
+            //ip고치기
+            new JSONTask().execute("http://10.101.53.25:3000/students/login");
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -86,7 +87,8 @@ public class MainActivity extends AppCompatActivity {
                 editor.putString("pw",str_pw);
                 editor.commit();
                 //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
-                new JSONTask().execute("http://172.30.1.23:3000/students/login");
+                //ip고치기
+                new JSONTask().execute("http://10.101.53.25:3000/students/login");
             }
         });
     }

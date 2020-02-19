@@ -45,8 +45,9 @@ public class DetailActivity extends AppCompatActivity {
 
     Button back, profile, btn_edit;
     ListView listView;
-    TextView text_percentage, text_lectureName, untilF;
+    TextView text_percentage, score_att, text_lectureName, untilF;
     int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;
+    float rateAtt = 0, absPoint = 0, noCount = 0, latePoint = 0, lateCountAbs = 0, scoreAtt = 0;
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -70,6 +71,7 @@ public class DetailActivity extends AppCompatActivity {
         btn_edit = findViewById(R.id.btn_edit);
         listView= findViewById(R.id.list_detail);
         text_percentage = findViewById(R.id.text_percentage);
+        score_att = findViewById(R.id.score_attendance);
         text_lectureName = findViewById(R.id.textView_lectureName);
         untilF = findViewById(R.id.score_untilF);
 
@@ -79,8 +81,22 @@ public class DetailActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();
 
         id_students = sharedPreferences.getString("id_students", "");
+        rateAtt = sharedPreferences.getFloat(lecture+"rate", 0);
+        absPoint = sharedPreferences.getFloat(lecture+"absPoint", 0);
+        noCount = sharedPreferences.getFloat(lecture+"noCount", 0);
+        latePoint = sharedPreferences.getFloat(lecture+"latePoint", 0);
+        lateCountAbs = sharedPreferences.getFloat(lecture+"lateCountAbs", 0);
 
-        new JSONTask().execute("http://172.30.1.23:3000/attendances/get");
+        Log.d("point", lecture+"rateAtt "+rateAtt+"");
+        Log.d("point", lecture+"absPoint "+absPoint+"");
+        Log.d("point", lecture+"noCount "+noCount+"");
+        Log.d("point", lecture+"latePoint "+latePoint+"");
+        Log.d("point", lecture+"lateCountAbs "+lateCountAbs+"");
+
+        text_percentage.setText((int)rateAtt+"");
+
+        //ip고치기
+        new JSONTask().execute("http://10.101.53.25:3000/attendances/get");
 
     }
 
@@ -116,6 +132,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         else if (v.getId() == R.id.btn_edit) {
             Intent intent = new Intent(this, EditActivity.class);
+            intent.putExtra("lectureID", lecture);
             startActivity(intent);
         }
 
@@ -261,6 +278,7 @@ public class DetailActivity extends AppCompatActivity {
                 Log.d("score", score+"");
                 untilF.setText(score+"");
 
+                score_att.setText(scoreAtt+"");
             }catch (JSONException e) {
                 e.printStackTrace();
             }

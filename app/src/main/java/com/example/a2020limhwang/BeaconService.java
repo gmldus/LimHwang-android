@@ -284,7 +284,8 @@ public class BeaconService extends Service {
                                     attState = 3;
                                     checkTime = "00:00:00";
                                 }
-                                new JSONTask().execute("http://172.30.1.23:3000/attendances/update");
+                                //ip고치기
+                                new JSONTask().execute("http://10.101.53.25:3000/attendances/update");
                             }
                         }
                         else if (gapEnd == 1) {
