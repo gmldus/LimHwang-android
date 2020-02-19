@@ -56,7 +56,7 @@ public class DetailActivity extends AppCompatActivity {
 
     String lecture, id_students, str_result, lectureName;
     String[] date, name, lectureNum, state, checkTime;
-    int score = -1;
+    int score = 0;
 
 
     @Override
@@ -277,6 +277,7 @@ public class DetailActivity extends AppCompatActivity {
                 }
 
                 if (score < 0) score = 0;
+
                 Log.d("score", score+"");
                 untilF.setText(score+"");
 

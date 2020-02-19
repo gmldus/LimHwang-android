@@ -402,7 +402,7 @@ public class BeaconService extends Service {
 
         @Override
         protected void onPostExecute(String result) {
-            
+
             PowerManager powerManager;
 
             PowerManager.WakeLock wakeLock;
@@ -449,7 +449,9 @@ public class BeaconService extends Service {
 
                 if(attState==3 ){
 
-                    editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
+                    if(sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1 < 0)
+                        editor.putInt(sharedPreferences.getString(lectureNum[index],null),0);
+                    else editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
                     editor.commit();
                     builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)+" 결석입니다") // required
                             .setContentText("F까지 결석횟수 "+sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)+"번 남았습니다")  // required
