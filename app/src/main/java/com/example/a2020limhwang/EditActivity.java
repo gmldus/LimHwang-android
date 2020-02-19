@@ -60,7 +60,7 @@ public class EditActivity extends AppCompatActivity {
         } else if (v.getId() == R.id.save) {
 
             if (check_edit == true) {
-                if ((check_r1 == true && check_r1edit == true) || (check_r2 == true && check_r2edit == true)) {
+                if ((check_r1 == true && check_r1edit == false) || (check_r2 == true && check_r2edit == false)) {
                     rate = Float.parseFloat(et_rate.getText().toString());
                     input1 = Float.parseFloat(et_input1.getText().toString());
                     input2 = Float.parseFloat(et_input2.getText().toString());
