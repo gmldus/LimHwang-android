@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,8 @@ import androidx.core.app.NotificationCompat;
 
 public class DetailActivity extends AppCompatActivity {
 
-    Button back, profile, btn_edit;
+    Button back, btn_edit;
+    ImageButton profile;
     ListView listView;
     TextView text_percentage, score_att, text_lectureName, untilF;
     int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;

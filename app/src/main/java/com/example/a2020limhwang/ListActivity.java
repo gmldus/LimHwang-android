@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +50,8 @@ import static com.example.a2020limhwang.BeaconService.MY_PERMISSIONS;
 
 public class ListActivity extends AppCompatActivity {
 
-    Button back, profile;
+    Button back;
+    ImageButton profile;
     ListView listView;
 
     float[] percentage;

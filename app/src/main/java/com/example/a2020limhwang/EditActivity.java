@@ -9,11 +9,13 @@ package com.example.a2020limhwang;
         import android.view.View;
         import android.widget.Button;
         import android.widget.EditText;
+        import android.widget.ImageButton;
         import android.widget.RadioButton;
 
 public class EditActivity extends AppCompatActivity {
 
-    Button back, profile, save;
+    Button back, save;
+    ImageButton profile;
     EditText et_rate, et_input1, et_input2, et_input3, et_input4;
     RadioButton radio1, radio2;
     float rate = 0, input1 = 0, input2 = 0, input3 = 0, input4 = 0;
