@@ -44,8 +44,8 @@ import androidx.core.app.NotificationCompat;
 
 public class DetailActivity extends AppCompatActivity {
 
-    Button back, btn_edit;
-    ImageButton profile;
+    Button btn_edit;
+    ImageButton back, profile;
     ListView listView;
     TextView text_percentage, score_att, text_lectureName, untilF;
     int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;
@@ -286,13 +286,4 @@ public class DetailActivity extends AppCompatActivity {
             }
         }
     }
-
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            Intent intent = getIntent();
-            ScoreInformation si = (ScoreInformation) intent.getSerializableExtra("score_information");
-            text_percentage.setText(si.rate + "");
-        }
-    }
-
 }

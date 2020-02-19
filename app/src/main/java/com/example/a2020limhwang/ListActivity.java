@@ -50,8 +50,7 @@ import static com.example.a2020limhwang.BeaconService.MY_PERMISSIONS;
 
 public class ListActivity extends AppCompatActivity {
 
-    Button back;
-    ImageButton profile;
+    ImageButton back, profile;
     ListView listView;
 
     float[] percentage;

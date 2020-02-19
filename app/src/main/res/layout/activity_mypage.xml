@@ -14,16 +14,14 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="back"
-                android:textColor="@android:color/white"
-                android:textSize="15pt"
-                android:background="@color/bg"
-                android:fontFamily="@font/nanumsquare_light"
-                android:onClick="onClick"/>
+                android:layout_margin="10dp"
+                android:src="@drawable/backicon"
+                android:onClick="onClick"
+                android:background="#00000000"/>
 
         </RelativeLayout>
 
