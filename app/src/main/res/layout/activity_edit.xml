@@ -167,64 +167,86 @@
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/nanumsquare_light"/>
 
-        <RadioGroup
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_gravity="center_horizontal">
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:id="@+id/radio1"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <RadioGroup
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="지각 1회당 "
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanumsquare_light"/>
-                <EditText
-                    android:id="@+id/input3"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:inputType="number"
-                    android:singleLine="true"
-                    android:background="@drawable/edit_text_border" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanumsquare_light"
-                    android:text="점 감점" />
-            </LinearLayout>
+                    android:layout_gravity="center_vertical">
 
+                    <RadioButton
+                        android:id="@+id/radio1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="지각 1회당 "
+                        android:textSize="20dp"
+                        android:fontFamily="@font/nanumsquare_light"
+                        android:layout_marginBottom="10dp"/>
+
+                    <RadioButton
+                        android:id="@+id/radio2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="지각 "
+                        android:textSize="20dp"
+                        android:fontFamily="@font/nanumsquare_light"/>
+
+                </RadioGroup>
+            </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
-                <RadioButton
-                    android:id="@+id/radio2"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1">
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="지각 "
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanumsquare_light"/>
-
-                <EditText
-                    android:layout_gravity="center_horizontal"
-                    android:id="@+id/input4"
-                    android:layout_width="60dp"
-                    android:layout_height="40dp"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:background="@drawable/edit_text_border" />
-
-                <TextView
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/input3"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:inputType="text"
+                        android:singleLine="true"
+                        android:background="@drawable/edit_text_border" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:fontFamily="@font/nanumsquare_light"
+                        android:text="점 감점" />
+                </LinearLayout>
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
-                    android:fontFamily="@font/nanumsquare_light"
-                    android:text="회가 결석 1번과 같음" />
+                    android:orientation="horizontal">
+                    <EditText
+                        android:layout_gravity="center_horizontal"
+                        android:id="@+id/input4"
+                        android:layout_width="60dp"
+                        android:layout_height="40dp"
+                        android:layout_marginRight="10dp"
+                        android:inputType="number"
+                        android:singleLine="true"
+                        android:background="@drawable/edit_text_border" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="20dp"
+                        android:fontFamily="@font/nanumsquare_light"
+                        android:text="회가 결석 1번과 같음" />
+                </LinearLayout>
             </LinearLayout>
-
-        </RadioGroup>
+        </LinearLayout>
 
         <Button
             android:id="@+id/save"

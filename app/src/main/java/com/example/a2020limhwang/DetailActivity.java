@@ -279,8 +279,7 @@ public class DetailActivity extends AppCompatActivity {
                 if (score < 0) score = 0;
                 Log.d("score", score+"");
                 untilF.setText(score+"");
-
-                score_att.setText(scoreAtt+"");
+                
             }catch (JSONException e) {
                 e.printStackTrace();
             }
