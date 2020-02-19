@@ -5,6 +5,7 @@ package com.example.a2020limhwang;
         import android.content.Intent;
         import android.content.SharedPreferences;
         import android.os.Bundle;
+        import android.text.TextUtils;
         import android.util.Log;
         import android.view.View;
         import android.widget.Button;
@@ -45,46 +46,57 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
+        boolean check_edit = testparam(et_rate.getText().toString(), et_input1.getText().toString(), et_input2.getText().toString());
+        boolean check_r1 = radio1.isChecked();
+        boolean check_r2 = radio2.isChecked();
+        boolean check_r1edit = TextUtils.isEmpty(et_input3.getText().toString());
+        boolean check_r2edit = TextUtils.isEmpty(et_input4.getText().toString());
 
-        boolean checknull = testparam(et_rate.toString(), et_input1.toString(), et_input2.toString(), et_input3.toString(), et_input4.toString());
+        if (v.getId() == R.id.profile) {
+            Intent intent = new Intent(this, MypageActivity.class);
+            startActivity(intent);
+        } else if (v.getId() == R.id.back) {
+            finish();
+        } else if (v.getId() == R.id.save) {
 
-        if (checknull == false || (radio1.isChecked() == false && radio2.isChecked() == false)) {
-            Toast.makeText(this.getApplicationContext(), "값을 입력하세요", Toast.LENGTH_LONG).show();
-        }
-        else {
-            if (v.getId() == R.id.profile) {
-                Intent intent = new Intent(this, MypageActivity.class);
-                startActivity(intent);
-            } else if (v.getId() == R.id.back) {
-                finish();
-            } else if (v.getId() == R.id.save) {
-                rate = Float.parseFloat(et_rate.getText().toString());
-                input1 = Float.parseFloat(et_input1.getText().toString());
-                input2 = Float.parseFloat(et_input2.getText().toString());
+            if (check_edit == true) {
+                if ((check_r1 == true && check_r1edit == true) || (check_r2 == true && check_r2edit == true)) {
+                    rate = Float.parseFloat(et_rate.getText().toString());
+                    input1 = Float.parseFloat(et_input1.getText().toString());
+                    input2 = Float.parseFloat(et_input2.getText().toString());
 
-                if (radio1.isChecked()) {
-                    input3 = Float.parseFloat(et_input3.getText().toString());
-                } else if (radio2.isChecked()) {
-                    input4 = Float.parseFloat(et_input4.getText().toString());
+                    if (radio1.isChecked()) {
+                        input3 = Float.parseFloat(et_input3.getText().toString());
+                    } else if (radio2.isChecked()) {
+                        input4 = Float.parseFloat(et_input4.getText().toString());
+                    }
+
+                    sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
+                    editor.putFloat(lecture + "rate", rate);
+                    editor.putFloat(lecture + "absPoint", input1);
+                    editor.putFloat(lecture + "noCount", input2);
+                    editor.putFloat(lecture + "latePoint", input3);
+                    editor.putFloat(lecture + "lateCountAbs", input4);
+                    Log.d("point", lecture + "rateAtt " + rate + "");
+                    Log.d("point", lecture + "absPoint " + input1 + "");
+                    Log.d("point", lecture + "noCount " + input2 + "");
+                    Log.d("point", lecture + "latePoint " + input3 + "");
+                    Log.d("point", lecture + "lateCountAbs " + input4 + "");
+                    editor.commit();
+
+                    finish();
                 }
-
-                sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
-                editor = sharedPreferences.edit();
-                editor.putFloat(lecture + "rate", rate);
-                editor.putFloat(lecture + "absPoint", input1);
-                editor.putFloat(lecture + "noCount", input2);
-                editor.putFloat(lecture + "latePoint", input3);
-                editor.putFloat(lecture + "lateCountAbs", input4);
-                Log.d("point", lecture + "rateAtt " + rate + "");
-                Log.d("point", lecture + "absPoint " + input1 + "");
-                Log.d("point", lecture + "noCount " + input2 + "");
-                Log.d("point", lecture + "latePoint " + input3 + "");
-                Log.d("point", lecture + "lateCountAbs " + input4 + "");
-                editor.commit();
-
-                finish();
+                else {
+                    Toast.makeText(getApplicationContext(), "값을 입력하세요", Toast.LENGTH_LONG).show();
+                }
             }
+            else {
+                Toast.makeText(getApplicationContext(), "값을 입력하세요", Toast.LENGTH_LONG).show();
+            }
+
         }
+
     }
     public boolean testparam (String... params){
         for (String param : params){
