@@ -279,7 +279,26 @@ public class DetailActivity extends AppCompatActivity {
                 if (score < 0) score = 0;
                 Log.d("score", score+"");
                 untilF.setText(score+"");
-                
+
+                int tmpCntAbs = cntAbs;
+                float tmpLate = 0;
+                Log.d("cnt", "lateCountAbs"+lateCountAbs+"");
+                Log.d("cnt", "latePoint"+latePoint+"");
+                if (lateCountAbs != 0 && latePoint == 0.0) {
+                    tmpCntAbs += (int)cntLate / (int)lateCountAbs;
+                }
+                else if (latePoint != 0 && lateCountAbs == 0.0) {
+                    tmpLate = cntLate * latePoint;
+                }
+
+                if (tmpCntAbs >= noCount) tmpCntAbs -= noCount;
+                float tmpAbs = (float)tmpCntAbs * absPoint;
+
+
+                scoreAtt = rateAtt - (tmpAbs + tmpLate);
+                Log.d("cnt", "scoreAtt"+scoreAtt+"");
+                score_att.setText(scoreAtt+"");
+
             }catch (JSONException e) {
                 e.printStackTrace();
             }

@@ -121,7 +121,7 @@
                 android:id="@+id/input1"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
-                android:inputType="number"
+                android:inputType="text"
                 android:singleLine="true"
                 android:background="@drawable/edit_text_border" />
             <TextView
