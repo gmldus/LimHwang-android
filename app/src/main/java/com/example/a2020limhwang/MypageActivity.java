@@ -43,9 +43,7 @@ public class MypageActivity extends AppCompatActivity {
         }
         else if (v.getId() == R.id.logoutButton) {
             Intent intent = new Intent (this, MainActivity.class);
-            editor.remove("id");
-            editor.remove("pw");
-            //모든 sharedpreference 지우기
+            editor.clear();
             editor.commit();
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
