@@ -11,6 +11,7 @@ package com.example.a2020limhwang;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.RadioButton;
+        import android.widget.Toast;
 
 public class EditActivity extends AppCompatActivity {
 
@@ -44,40 +45,54 @@ public class EditActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
-        if (v.getId() == R.id.profile) {
-            Intent intent = new Intent(this, MypageActivity.class);
-            startActivity(intent);
-        }
-        else if (v.getId() == R.id.back) {
-            finish();
-        }
-        else if (v.getId() == R.id.save) {
-            rate = Float.parseFloat(et_rate.getText().toString());
-            input1 = Float.parseFloat(et_input1.getText().toString());
-            input2 = Float.parseFloat(et_input2.getText().toString());
 
-            if (radio1.isChecked()) {
-                input3 = Float.parseFloat(et_input3.getText().toString());
+        boolean checknull = testparam(et_rate.toString(), et_input1.toString(), et_input2.toString(), et_input3.toString(), et_input4.toString());
+
+        if (checknull == false || (radio1.isChecked() == false && radio2.isChecked() == false)) {
+            Toast.makeText(this.getApplicationContext(), "값을 입력하세요", Toast.LENGTH_LONG).show();
+        }
+        else {
+            if (v.getId() == R.id.profile) {
+                Intent intent = new Intent(this, MypageActivity.class);
+                startActivity(intent);
+            } else if (v.getId() == R.id.back) {
+                finish();
+            } else if (v.getId() == R.id.save) {
+                rate = Float.parseFloat(et_rate.getText().toString());
+                input1 = Float.parseFloat(et_input1.getText().toString());
+                input2 = Float.parseFloat(et_input2.getText().toString());
+
+                if (radio1.isChecked()) {
+                    input3 = Float.parseFloat(et_input3.getText().toString());
+                } else if (radio2.isChecked()) {
+                    input4 = Float.parseFloat(et_input4.getText().toString());
+                }
+
+                sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putFloat(lecture + "rate", rate);
+                editor.putFloat(lecture + "absPoint", input1);
+                editor.putFloat(lecture + "noCount", input2);
+                editor.putFloat(lecture + "latePoint", input3);
+                editor.putFloat(lecture + "lateCountAbs", input4);
+                Log.d("point", lecture + "rateAtt " + rate + "");
+                Log.d("point", lecture + "absPoint " + input1 + "");
+                Log.d("point", lecture + "noCount " + input2 + "");
+                Log.d("point", lecture + "latePoint " + input3 + "");
+                Log.d("point", lecture + "lateCountAbs " + input4 + "");
+                editor.commit();
+
+                finish();
             }
-            else if (radio2.isChecked()) {
-                input4 = Float.parseFloat(et_input4.getText().toString());
-            }
-
-            sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
-            editor = sharedPreferences.edit();
-            editor.putFloat(lecture+"rate", rate);
-            editor.putFloat(lecture+"absPoint",input1);
-            editor.putFloat(lecture+"noCount",input2);
-            editor.putFloat(lecture+"latePoint",input3);
-            editor.putFloat(lecture+"lateCountAbs",input4);
-            Log.d("point", lecture+"rateAtt "+rate+"");
-            Log.d("point", lecture+"absPoint "+input1+"");
-            Log.d("point", lecture+"noCount "+input2+"");
-            Log.d("point", lecture+"latePoint "+input3+"");
-            Log.d("point", lecture+"lateCountAbs "+input4+"");
-            editor.commit();
-
-            finish();
         }
+    }
+    public boolean testparam (String... params){
+        for (String param : params){
+            if(param == null || param.isEmpty()){
+                //Log.d("빈칸","빈칸");
+                return false;
+            }
+        }
+        return true;
     }
 }
