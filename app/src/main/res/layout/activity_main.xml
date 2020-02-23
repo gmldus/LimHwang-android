@@ -47,13 +47,6 @@
             android:text="로그인"
             android:fontFamily="@font/nanumsquare_light"/>
 
-        <Button
-            android:id="@+id/joinButton"
-            android:layout_width="250dp"
-            android:layout_height="40dp"
-            android:text="회원가입"
-            android:fontFamily="@font/nanumsquare_light"/>
-
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

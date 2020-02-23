@@ -125,7 +125,7 @@ public class BeaconService extends Service {
         lectureNum = intent.getStringArrayExtra("lectureNum");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-        myTimer = new BeaconService.MyTimer(1200000, 1000);
+        myTimer = new BeaconService.MyTimer(600000, 1000);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
             @Override
@@ -230,7 +230,7 @@ public class BeaconService extends Service {
 
 
 
-                    if (gapStart >= 0 && gapEnd <= 1) {
+                    if (gapStart >= 0 && gapEnd <= 10) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
