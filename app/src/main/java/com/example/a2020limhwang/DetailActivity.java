@@ -57,7 +57,6 @@ public class DetailActivity extends AppCompatActivity {
     String[] date, name, lectureNum, state, checkTime;
     int score = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,11 +87,11 @@ public class DetailActivity extends AppCompatActivity {
         latePoint = sharedPreferences.getFloat(lecture+"latePoint", 0);
         lateCountAbs = sharedPreferences.getFloat(lecture+"lateCountAbs", 0);
 
-        Log.d("point", lecture+"rateAtt "+rateAtt+"");
-        Log.d("point", lecture+"absPoint "+absPoint+"");
-        Log.d("point", lecture+"noCount "+noCount+"");
-        Log.d("point", lecture+"latePoint "+latePoint+"");
-        Log.d("point", lecture+"lateCountAbs "+lateCountAbs+"");
+        //Log.d("point", lecture+"rateAtt "+rateAtt+"");
+        //Log.d("point", lecture+"absPoint "+absPoint+"");
+        //Log.d("point", lecture+"noCount "+noCount+"");
+        //Log.d("point", lecture+"latePoint "+latePoint+"");
+        //Log.d("point", lecture+"lateCountAbs "+lateCountAbs+"");
 
         text_percentage.setText((int)rateAtt+"");
 
@@ -136,7 +135,6 @@ public class DetailActivity extends AppCompatActivity {
             intent.putExtra("lectureID", lecture);
             startActivityForResult(intent, 0);
         }
-
     }
 
     public class JSONTask extends AsyncTask<String, String, String> {
@@ -242,19 +240,17 @@ public class DetailActivity extends AppCompatActivity {
                         state[i] = "결석";
                         cntAbs++;
                     }
-
-                    Log.d("name", name[i]);
-                    Log.d("lectureNum", lectureNum[i]);
-                    Log.d("date", date[i]);
-                    Log.d("state", state[i]);
-                    Log.d("checktime", checkTime[i]);
-
+                    //Log.d("name", name[i]);
+                    //Log.d("lectureNum", lectureNum[i]);
+                    //Log.d("date", date[i]);
+                    //Log.d("state", state[i]);
+                    //Log.d("checktime", checkTime[i]);
                 }
 
-                Log.d("log all", numOfAtt+"");
-                Log.d("log att", cntAtt+"");
-                Log.d("log late", cntLate+"");
-                Log.d("log abs", cntAbs+"");
+                //Log.d("log all", numOfAtt+"");
+                //Log.d("log att", cntAtt+"");
+                //Log.d("log late", cntLate+"");
+                //Log.d("log abs", cntAbs+"");
 
                 CustomList adapter = new CustomList(DetailActivity.this);
                 listView.setAdapter(adapter);
@@ -277,37 +273,30 @@ public class DetailActivity extends AppCompatActivity {
 
                 if (score < 0) score = 0;
 
-                Log.d("score", score+"");
+                //Log.d("score", score+"");
                 untilF.setText(score+"");
 
+                int tmpCntAbs = cntAbs;
+                float tmpLate = 0;
+                //Log.d("cnt", "lateCountAbs"+lateCountAbs+"");
+                //Log.d("cnt", "latePoint"+latePoint+"");
+                if (lateCountAbs != 0 && latePoint == 0.0) {
+                    tmpCntAbs += (int)cntLate / (int)lateCountAbs;
+                }
+                else if (latePoint != 0 && lateCountAbs == 0.0) {
+                    tmpLate = cntLate * latePoint;
+                }
 
+                if (tmpCntAbs >= noCount) tmpCntAbs -= noCount;
+                float tmpAbs = (float)tmpCntAbs * absPoint;
+
+                scoreAtt = rateAtt - (tmpAbs + tmpLate);
+                //Log.d("cnt", "scoreAtt"+scoreAtt+"");
+                score_att.setText(scoreAtt+"");
 
             }catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-    }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
-        Log.d("activity", "result");
-        int tmpCntAbs = cntAbs;
-        float tmpLate = 0;
-        Log.d("cnt", "lateCountAbs"+lateCountAbs+"");
-        Log.d("cnt", "latePoint"+latePoint+"");
-        if (lateCountAbs != 0 && latePoint == 0.0) {
-            tmpCntAbs += (int)cntLate / (int)lateCountAbs;
-        }
-        else if (latePoint != 0 && lateCountAbs == 0.0) {
-            tmpLate = cntLate * latePoint;
-        }
-
-        if (tmpCntAbs >= noCount) tmpCntAbs -= noCount;
-        float tmpAbs = (float)tmpCntAbs * absPoint;
-
-
-        scoreAtt = rateAtt - (tmpAbs + tmpLate);
-        Log.d("cnt", "scoreAtt"+scoreAtt+"");
-        score_att.setText(scoreAtt+"");
-
     }
 }

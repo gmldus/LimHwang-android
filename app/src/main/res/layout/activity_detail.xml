@@ -82,7 +82,7 @@
                     android:id="@+id/text_percentage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="20"
+                    android:text=" "
                     android:textSize="8pt" />
                           
                 <TextView
@@ -99,16 +99,19 @@
                     android:layout_height="40dp"
                     android:layout_alignParentRight="true"
                     android:onClick="onClick"
-                    android:src="@drawable/editicon"/>
+                    android:src="@drawable/editicon"
+                    android:background="#00000000"/>
               
                 <TextView
                     android:id="@+id/score_attendance"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/text_percentage"
-                    android:layout_margin="20dp"
-                    android:text="19"
-                    android:textSize="20pt"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="  "
+                    android:textSize="18pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
               
@@ -117,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/score_attendance"
                     android:layout_alignBottom="@id/score_attendance"
-                    android:text="점"
+                    android:text=" 점"
                     android:textSize="8pt"
                     android:fontFamily="@font/nanumsquare_light"/>
 
@@ -144,7 +147,7 @@
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@id/text_untilF"
                     android:layout_margin="20dp"
-                    android:text="?"
+                    android:text=""
                     android:textSize="20pt"
                     android:textStyle="bold"
                     android:fontFamily="@font/nanumsquare_light"/>
