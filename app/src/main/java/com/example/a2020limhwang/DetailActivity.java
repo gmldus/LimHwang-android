@@ -44,8 +44,7 @@ import androidx.core.app.NotificationCompat;
 
 public class DetailActivity extends AppCompatActivity {
 
-    Button btn_edit;
-    ImageButton back, profile;
+    ImageButton back, profile, btn_edit;
     ListView listView;
     TextView text_percentage, score_att, text_lectureName, untilF;
     int numOfAtt = 0, cntAtt = 0, cntLate = 0, cntAbs = 0;
@@ -98,7 +97,7 @@ public class DetailActivity extends AppCompatActivity {
         text_percentage.setText((int)rateAtt+"");
 
         //ip고치기
-        new JSONTask().execute("http://10.101.53.25:3000/attendances/get");
+        new JSONTask().execute("http://10.101.53.12:3000/attendances/get");
 
     }
 
@@ -135,7 +134,7 @@ public class DetailActivity extends AppCompatActivity {
         else if (v.getId() == R.id.btn_edit) {
             Intent intent = new Intent(this, EditActivity.class);
             intent.putExtra("lectureID", lecture);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         }
 
     }
@@ -280,28 +279,34 @@ public class DetailActivity extends AppCompatActivity {
                 Log.d("score", score+"");
                 untilF.setText(score+"");
 
-                int tmpCntAbs = cntAbs;
-                float tmpLate = 0;
-                Log.d("cnt", "lateCountAbs"+lateCountAbs+"");
-                Log.d("cnt", "latePoint"+latePoint+"");
-                if (lateCountAbs != 0 && latePoint == 0.0) {
-                    tmpCntAbs += (int)cntLate / (int)lateCountAbs;
-                }
-                else if (latePoint != 0 && lateCountAbs == 0.0) {
-                    tmpLate = cntLate * latePoint;
-                }
 
-                if (tmpCntAbs >= noCount) tmpCntAbs -= noCount;
-                float tmpAbs = (float)tmpCntAbs * absPoint;
-
-
-                scoreAtt = rateAtt - (tmpAbs + tmpLate);
-                Log.d("cnt", "scoreAtt"+scoreAtt+"");
-                score_att.setText(scoreAtt+"");
 
             }catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent resultIntent) {
+        Log.d("activity", "result");
+        int tmpCntAbs = cntAbs;
+        float tmpLate = 0;
+        Log.d("cnt", "lateCountAbs"+lateCountAbs+"");
+        Log.d("cnt", "latePoint"+latePoint+"");
+        if (lateCountAbs != 0 && latePoint == 0.0) {
+            tmpCntAbs += (int)cntLate / (int)lateCountAbs;
+        }
+        else if (latePoint != 0 && lateCountAbs == 0.0) {
+            tmpLate = cntLate * latePoint;
+        }
+
+        if (tmpCntAbs >= noCount) tmpCntAbs -= noCount;
+        float tmpAbs = (float)tmpCntAbs * absPoint;
+
+
+        scoreAtt = rateAtt - (tmpAbs + tmpLate);
+        Log.d("cnt", "scoreAtt"+scoreAtt+"");
+        score_att.setText(scoreAtt+"");
+
     }
 }

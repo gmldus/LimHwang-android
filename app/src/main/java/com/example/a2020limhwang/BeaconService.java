@@ -125,7 +125,7 @@ public class BeaconService extends Service {
         lectureNum = intent.getStringArrayExtra("lectureNum");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-        myTimer = new BeaconService.MyTimer(20000, 1000);
+        myTimer = new BeaconService.MyTimer(1200000, 1000);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
             @Override
@@ -161,7 +161,7 @@ public class BeaconService extends Service {
                 if (beacons.size() > 0) {
                     beaconList.clear();
                     for (Beacon beacon : beacons) {
-                        if (beacon.getDistance() < 1.0) {
+                        if (beacon.getDistance() < 2.0) {
                             Log.d("비콘", "I see a beacon that is less than 1 meters away.");
                             beaconList.add(beacon);
                             timerState = 1;
@@ -285,7 +285,7 @@ public class BeaconService extends Service {
                                     checkTime = "00:00:00";
                                 }
                                 //ip고치기
-                                new JSONTask().execute("http://10.101.53.25:3000/attendances/update");
+                                new JSONTask().execute("http://10.101.53.12:3000/attendances/update");
                             }
                         }
                         else if (gapEnd == 1) {
