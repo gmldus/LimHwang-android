@@ -285,7 +285,7 @@ public class BeaconService extends Service {
                                     checkTime = "00:00:00";
                                 }
                                 //ip고치기
-                                new JSONTask().execute("http://10.101.53.25:3000/attendances/update");
+                                new JSONTask().execute("http://10.101.53.12:3000/attendances/update");
                             }
                         }
                         else if (gapEnd == 1) {
