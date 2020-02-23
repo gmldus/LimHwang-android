@@ -12,10 +12,12 @@ package com.example.a2020limhwang;
         import android.widget.EditText;
         import android.widget.ImageButton;
         import android.widget.RadioButton;
+        import android.widget.TextView;
         import android.widget.Toast;
 
 public class EditActivity extends AppCompatActivity {
 
+    TextView textView_lectureName;
     Button save;
     ImageButton back, profile;
     EditText et_rate, et_input1, et_input2, et_input3, et_input4;
@@ -23,7 +25,7 @@ public class EditActivity extends AppCompatActivity {
     float rate = 0, input1 = 0, input2 = 0, input3 = 0, input4 = 0;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
-    String lecture = "";
+    String lecture = "", lectureName = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,9 +42,12 @@ public class EditActivity extends AppCompatActivity {
         et_input4 = findViewById(R.id.input4);
         radio1 = findViewById(R.id.radio1);
         radio2 = findViewById(R.id.radio2);
+        textView_lectureName = findViewById(R.id.textView_lectureName);
 
         Intent intent = getIntent();
         lecture = intent.getStringExtra("lectureID");
+        lectureName = intent.getStringExtra("lectureName");
+        textView_lectureName.setText(lectureName);
     }
 
     public void onClick(View v) {

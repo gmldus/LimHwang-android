@@ -140,12 +140,15 @@ public class BeaconService extends Service {
 
             @Override
             public void didExitRegion(Region region) {
+                /*
                 try {
                     Log.d(TAG, "didExitRegion");
                     beaconManager.stopRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
+
+                 */
             }
 
             @Override
@@ -158,27 +161,30 @@ public class BeaconService extends Service {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
 
+                Log.d("beaconsize", beacons.size()+"");
                 if (beacons.size() > 0) {
                     beaconList.clear();
-                    for (Beacon beacon : beacons) {
-                        if (beacon.getDistance() < 2.0) {
-                            Log.d("비콘", "I see a beacon that is less than 1 meters away.");
-                            beaconList.add(beacon);
-                            timerState = 1;
-                            myTimer.cancel();
-                            if (tmp == 1) {
-                                attState = 1;
-                            }
-                            else if (tmp == 2) {
-                                attState = 2;
-                            }
+                }
+                for (Beacon beacon : beacons) {
+                    if (beacon.getDistance() < 1) {
+                        Log.d("비콘", "I see a beacon that is less than 1 meters away.");
+                        beaconList.add(beacon);
+                        timerState = 1;
+                        myTimer.cancel();
+                        if (tmp == 1) {
+                            attState = 1;
+                            Log.d("attState(set)", attState+"");
                         }
-                        else{
-                            Log.d("비콘", "no beacon in range");
-                            if (timerState == 1) {
-                                myTimer.start();
-                                timerState = 0;
-                            }
+                        else if (tmp == 2) {
+                            attState = 2;
+                            Log.d("attState(set)", attState+"");
+                        }
+                    }
+                    else{
+                        Log.d("비콘", "no beacon in range");
+                        if (timerState == 1) {
+                            myTimer.start();
+                            timerState = 0;
                         }
                     }
                 }
@@ -199,9 +205,9 @@ public class BeaconService extends Service {
             allFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             timeNow = timeFormat.format(dateNow);
             //log
-            Log.d("log now", timeNow);
-            Log.d("log dateNow", dateNow.toString());
-            Log.d("timeNow", timeNow);
+            //Log.d("log now", timeNow);
+            //Log.d("log dateNow", dateNow.toString());
+            //Log.d("timeNow", timeNow);
 
             //여기서 start와 end값 한쌍 채택 (가까운 범위안에 드는 애들로)
             start = "2020-02-13 21:37:00";
@@ -219,8 +225,8 @@ public class BeaconService extends Service {
                     dateEnd = allFormat.parse(end_text);
 
                     //log
-                    Log.d("log date start", dateStart.toString());
-                    Log.d("log date end", dateEnd.toString());
+                    //Log.d("log date start", dateStart.toString());
+                    //Log.d("log date end", dateEnd.toString());
 
                     long gapStart = dateNow.getTime() - dateStart.getTime();
                     long gapEnd = dateNow.getTime() - dateEnd.getTime();
@@ -238,53 +244,51 @@ public class BeaconService extends Service {
                         }
 
                         //log
-                        Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
-                        Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
-                        Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
+                        //Log.d("log dateNow.getTime()", Long.toString(dateNow.getTime()));
+                        //Log.d("log dateStart.getTime()", Long.toString(dateStart.getTime()));
+                        //Log.d("log dateEnd.getTime()", Long.toString(dateEnd.getTime()));
 
-                        Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
-                        Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
+                        //Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
+                        //Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
                         //log
                         Log.d("log gap start", Long.toString(gapStart));
                         Log.d("log gap end", Long.toString(gapEnd));
+                        Log.d("log attState", attState+"");
+                        Log.d("log tmp", tmp+"");
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
-                        Log.d("vsdfedcscsefd", Identifier.parse(beaconID[i]).toString());
-                        if (attState == 0 && gapStart >= 0 && gapStart <= 10) {
-                            //attState = 1;
-                            //textView3.setText("1. 출석");
+                        Log.d("log region", Identifier.parse(beaconID[i]).toString());
+                        if (attState == 0 && gapStart >= 0 && gapStart <= 1) {
                             try {
                                 tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
-                                Log.d("start", "출석 start");
+                                Log.d("now", "출석 start");
                             } catch (RemoteException e) {
                             }
                         }
-                        else if (attState == 0 && gapStart > 10 && gapEnd < -10) {
-                            //attState = 2;
-                            //textView3.setText("2. 지각");
+                        else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
                             try {
-                                Log.d("start", "지각 start");
                                 tmp = 2;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
-
+                                Log.d("now", "지각 start");
                             } catch (RemoteException e) {
                             }
                         }
-                        else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
-                            //attState = 3;
+                        else if (attState == 0 && gapEnd >= -1 && gapEnd < 0) {
+                            Log.d("now", "결석 start");
                             tmp = 3;
-                            //textView3.setText("3. 결석");
                         }
                         else if(gapEnd == 0){  //initialize
                             if (postState == 0) {
                                 postState = 1;
-                                if (attState == 0 || tmp == 3) {
+                                if (attState == 0 && tmp == 3) {
+                                    Log.d("attState(if)", attState+"");
                                     attState = 3;
                                     checkTime = "00:00:00";
                                 }
                                 //ip고치기
+                                Log.d("attState", attState+"");
                                 new JSONTask().execute("http://10.101.53.12:3000/attendances/update");
                             }
                         }

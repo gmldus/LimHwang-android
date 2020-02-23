@@ -133,6 +133,7 @@ public class DetailActivity extends AppCompatActivity {
         else if (v.getId() == R.id.btn_edit) {
             Intent intent = new Intent(this, EditActivity.class);
             intent.putExtra("lectureID", lecture);
+            intent.putExtra("lectureName", lectureName);
             startActivityForResult(intent, 0);
         }
     }
