@@ -413,7 +413,7 @@ public class BeaconService extends Service {
                     PowerManager.ON_AFTER_RELEASE, "My:Tag");
 
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+
             String channelId = "channel";
             String channelName = "Channel Name";
 
@@ -443,20 +443,31 @@ public class BeaconService extends Service {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            if(attState==3){
+            String str_result = result+"";
+            try{
+                JSONObject jsonObject = new JSONObject(str_result);
 
-                editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
-                editor.commit();
-                builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)+" 결석입니다") // required
-                        .setContentText("F까지 결석횟수 "+sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)+"번 남았습니다")  // required
-                        .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
-                        .setAutoCancel(true) // 알림 터치시 반응 후 삭제
-                        .setSmallIcon(android.R.drawable.btn_star)
-                        .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+                if(attState==3 ){
 
-                wakeLock.acquire();
-                notifManager.notify(0, builder.build());
-                wakeLock.release();
+                    if(sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1 < 0)
+                        editor.putInt(sharedPreferences.getString(lectureNum[index],null),0);
+                    else editor.putInt(sharedPreferences.getString(lectureNum[index],null),sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)-1);
+                    editor.commit();
+                    builder.setContentTitle(sharedPreferences.getString(lectureNum[index],null)+" 결석입니다") // required
+                            .setContentText("F까지 결석횟수 "+sharedPreferences.getInt(sharedPreferences.getString(lectureNum[index],null),50)+"번 남았습니다")  // required
+                            .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                            .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                            .setSmallIcon(android.R.drawable.btn_star)
+                            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                    wakeLock.acquire();
+                    notifManager.notify(0, builder.build());
+                    wakeLock.release();
+                }
+
+
+            }catch (JSONException e) {
+                e.printStackTrace();
             }
 
             attState = 0;
