@@ -78,8 +78,8 @@ public class ListActivity extends AppCompatActivity {
         listView= findViewById(R.id.listView);
 
         //ip고치기
-        new JSONTask().execute("http://10.101.53.12:3000/lectures/get");
-        new JSONTask2().execute("http://10.101.53.12:3000/attendances/count");
+        new JSONTask().execute("http://192.168.45.159:3000/lectures/get");
+        new JSONTask2().execute("http://192.168.45.159:3000/attendances/count");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.getBeaconParsers().add(new BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));

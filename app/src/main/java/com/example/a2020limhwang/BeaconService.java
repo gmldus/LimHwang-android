@@ -125,6 +125,7 @@ public class BeaconService extends Service {
         lectureNum = intent.getStringArrayExtra("lectureNum");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
+        beaconManager.setBackgroundMode(false);
         myTimer = new BeaconService.MyTimer(600000, 1000);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
@@ -140,15 +141,13 @@ public class BeaconService extends Service {
 
             @Override
             public void didExitRegion(Region region) {
-                /*
+
                 try {
                     Log.d(TAG, "didExitRegion");
                     beaconManager.stopRangingBeaconsInRegion(region);
                 } catch (RemoteException e) {
                     e.printStackTrace();
                 }
-
-                 */
             }
 
             @Override
@@ -164,30 +163,31 @@ public class BeaconService extends Service {
                 Log.d("beaconsize", beacons.size()+"");
                 if (beacons.size() > 0) {
                     beaconList.clear();
-                }
-                for (Beacon beacon : beacons) {
-                    if (beacon.getDistance() < 1) {
-                        Log.d("비콘", "I see a beacon that is less than 1 meters away.");
-                        beaconList.add(beacon);
-                        timerState = 1;
-                        myTimer.cancel();
-                        if (tmp == 1) {
-                            attState = 1;
-                            Log.d("attState(set)", attState+"");
+                    for (Beacon beacon : beacons) {
+                        if (beacon.getDistance() < 1) {
+                            Log.d("비콘", "I see a beacon that is less than 1 meters away.");
+                            beaconList.add(beacon);
+                            timerState = 1;
+                            myTimer.cancel();
+                            if (tmp == 1) {
+                                attState = 1;
+                                Log.d("attState(set)", attState+"");
+                            }
+                            else if (tmp == 2) {
+                                attState = 2;
+                                Log.d("attState(set)", attState+"");
+                            }
                         }
-                        else if (tmp == 2) {
-                            attState = 2;
-                            Log.d("attState(set)", attState+"");
+                        else{
+                            Log.d("비콘", "no beacon in range");
+                            if (timerState == 1) {
+                                myTimer.start();
+                                timerState = 0;
+                            }
                         }
                     }
-                    else{
-                        Log.d("비콘", "no beacon in range");
-                        if (timerState == 1) {
-                            myTimer.start();
-                            timerState = 0;
-                        }
-                    }
                 }
+
             }
         });
         handler.sendEmptyMessage(0);
@@ -289,7 +289,7 @@ public class BeaconService extends Service {
                                 }
                                 //ip고치기
                                 Log.d("attState", attState+"");
-                                new JSONTask().execute("http://10.101.53.12:3000/attendances/update");
+                                new JSONTask().execute("http://192.168.45.159:3000/attendances/update");
                             }
                         }
                         else if (gapEnd == 1) {

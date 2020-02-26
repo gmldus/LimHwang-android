@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(sharedPreferences.getString("id_students",null)!=null){
             //ip고치기
-            new JSONTask().execute("http://10.101.53.12:3000/students/login");
+            new JSONTask().execute("http://192.168.45.159:3000/students/login");
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
                 //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
                 //ip고치기
-                new JSONTask().execute("http://10.101.53.12:3000/students/login");
+                new JSONTask().execute("http://192.168.45.159:3000/students/login");
             }
         });
     }
