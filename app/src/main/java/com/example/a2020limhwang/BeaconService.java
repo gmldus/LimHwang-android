@@ -215,23 +215,23 @@ public class BeaconService extends Service {
             Log.d("webnautes", date_text);
 
             try {
-                for (int i = 0;i<num; i++){
-                        start_text = date_text.concat(" "+startTime[i]);
-                        end_text = date_text.concat(" "+endTime[i]);
-                        dateStart = allFormat.parse(start_text);
-                        dateEnd = allFormat.parse(end_text);
+                for (int i = 0; i < num; i++) {
+                    start_text = date_text.concat(" " + startTime[i]);
+                    end_text = date_text.concat(" " + endTime[i]);
+                    dateStart = allFormat.parse(start_text);
+                    dateEnd = allFormat.parse(end_text);
 
-                        //log
-                        //Log.d("log date start", dateStart.toString());
-                        //Log.d("log date end", dateEnd.toString());
+                    //log
+                    //Log.d("log date start", dateStart.toString());
+                    //Log.d("log date end", dateEnd.toString());
 
-                        long gapStart = dateNow.getTime() - dateStart.getTime();
-                        long gapEnd = dateNow.getTime() - dateEnd.getTime();
+                    long gapStart = dateNow.getTime() - dateStart.getTime();
+                    long gapEnd = dateNow.getTime() - dateEnd.getTime();
 
-                        gapStart /= 60000;
-                        gapEnd /= 60000;
+                    gapStart /= 60000;
+                    gapEnd /= 60000;
 
-                        if (gapStart >= 0 && gapEnd <= 10) {
+                    if (gapStart >= 0 && gapEnd <= 10) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
@@ -247,13 +247,13 @@ public class BeaconService extends Service {
                         //Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
                         Log.d("log gap start", Long.toString(gapStart));
                         Log.d("log gap end", Long.toString(gapEnd));
-                        Log.d("log attState", attState+"");
-                        Log.d("log tmp", tmp+"");
-                        region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
+                        Log.d("log attState", attState + "");
+                        Log.d("log tmp", tmp + "");
+                        region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"), Identifier.parse(beaconID[i]));
                         Log.d("log region", Identifier.parse(beaconID[i]).toString());
 
                         if (gapStart == 1) {
-                            try{
+                            try {
                                 if (wakeState == 0) {
                                     wakeState = 1;
                                     //wake
@@ -275,8 +275,7 @@ public class BeaconService extends Service {
                                 Log.d("now", "출석 start");
                             } catch (RemoteException e) {
                             }
-                        }
-                        else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
+                        } else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
                             try {
                                 tmp = 2;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
@@ -285,29 +284,26 @@ public class BeaconService extends Service {
 
                             } catch (RemoteException e) {
                             }
-                        }
-                        else if (attState == 0 && gapEnd >= -1 && gapEnd < 0) {
+                        } else if (attState == 0 && gapEnd >= -1 && gapEnd < 0) {
                             Log.d("now", "결석 start");
                             tmp = 3;
-                        }
-                        else if(gapEnd == 0){  //initialize
+                        } else if (gapEnd == 0) {  //initialize
                             if (postState == 0) {
                                 postState = 1;
                                 if (attState == 0 && tmp == 3) {
-                                    Log.d("attState(if)", attState+"");
+                                    Log.d("attState(if)", attState + "");
                                     attState = 3;
                                     checkTime = "00:00:00";
                                 }
                                 //ip고치기
-                                Log.d("attState", attState+"");
+                                Log.d("attState", attState + "");
                                 new JSONTask().execute("http://172.30.1.59:3000/attendances/update");
                             }
                             if (wakeState == 1) {
                                 wakeState = 0;
                                 handler2.removeMessages(0);
                             }
-                        }
-                        else if (gapEnd == 1) {
+                        } else if (gapEnd == 1) {
                             postState = 0;
 
                         }
@@ -369,7 +365,7 @@ public class BeaconService extends Service {
             notifManager2.notify(0, builder2.build());
             wakeLock.release();
 
-            handler2.sendEmptyMessageDelayed(0, 900000);
+            handler2.sendEmptyMessageDelayed(0, 240000);
         }
     };
 
