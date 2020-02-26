@@ -200,25 +200,60 @@ public class BeaconService extends Service {
     }
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            String s = Integer.toString(beaconList.size());
-            //textView.setText(s);
+
             now = System.currentTimeMillis();
             dateNow = new Date(now);
             timeFormat = new SimpleDateFormat("HH:mm:ss");
             allFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             timeNow = timeFormat.format(dateNow);
-            //log
-            //Log.d("log now", timeNow);
-            //Log.d("log dateNow", dateNow.toString());
-            //Log.d("timeNow", timeNow);
 
-            //여기서 start와 end값 한쌍 채택 (가까운 범위안에 드는 애들로)
             start = "2020-02-13 21:37:00";
             end = "2020-02-13 22:50:00";
             currentTime = Calendar.getInstance().getTime();
             date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
             //date_text=date_text.concat(" "+startTime[0]);
             Log.d("webnautes", date_text);
+            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+
+            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
+            String channelId2 = "channel2";
+            String channelName2 = "Channel Name2";
+
+            NotificationManager notifManager2
+
+                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                NotificationChannel mChannel2 = new NotificationChannel(
+                        channelId2, channelName2, importance);
+
+                notifManager2.createNotificationChannel(mChannel2);
+
+            }
+
+            NotificationCompat.Builder builder2 =
+                    new NotificationCompat.Builder(getApplicationContext(), channelId2);
+
+            Intent notificationIntent = new Intent(getApplicationContext()
+
+                    , ListActivity.class);
+
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            builder2.setContentTitle("출석 검사 중 입니다") // required
+                    .setContentText("기다려주세요")  // required
+                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                    .setSmallIcon(android.R.drawable.btn_star)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
             try {
                 for (int i = 0;i<num; i++){
@@ -257,7 +292,7 @@ public class BeaconService extends Service {
                         Log.d("log tmp", tmp+"");
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
                         Log.d("log region", Identifier.parse(beaconID[i]).toString());
-                        if (attState == 0 && gapStart >= 0 && gapStart <= 1) {
+                        if (attState == 0 && gapStart >= 0 && gapStart < 1) {
                             try {
                                 tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
@@ -268,54 +303,17 @@ public class BeaconService extends Service {
                         }
                         else if(gapStart==1) {
 
-                            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                            try{
+                                wakeLock.acquire();
+                                notifManager2.notify(0, builder2.build());
 
-                            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
-                                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
-                            String channelId2 = "channel2";
-                            String channelName2 = "Channel Name2";
+                                tmp = 1;
+                                beaconManager.startMonitoringBeaconsInRegion(region);
+                                beaconManager.startRangingBeaconsInRegion(region);
 
-                            NotificationManager notifManager2
-
-                                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-                                int importance = NotificationManager.IMPORTANCE_HIGH;
-
-                                NotificationChannel mChannel2 = new NotificationChannel(
-                                        channelId2, channelName2, importance);
-
-                                notifManager2.createNotificationChannel(mChannel2);
-
+                                wakeLock.release();
+                            } catch (RemoteException e) {
                             }
-
-                            NotificationCompat.Builder builder2 =
-                                    new NotificationCompat.Builder(getApplicationContext(), channelId2);
-
-                            Intent notificationIntent = new Intent(getApplicationContext()
-
-                                    , ListActivity.class);
-
-                            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-                            builder2.setContentTitle("출석 검사 중 입니다") // required
-                                    .setContentText("기다려주세요")  // required
-                                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
-                                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
-                                    .setSmallIcon(android.R.drawable.btn_star)
-                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-
-                            wakeLock.acquire();
-                            notifManager2.notify(0, builder2.build());
-                            //tmp = 1;
-                            //beaconManager.startMonitoringBeaconsInRegion(region);
-                            //beaconManager.startRangingBeaconsInRegion(region);
-                            wakeLock.release();
-
                         }
                         else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
                             try {
@@ -323,6 +321,7 @@ public class BeaconService extends Service {
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
                                 Log.d("now", "지각 start");
+
                             } catch (RemoteException e) {
                             }
                         }
