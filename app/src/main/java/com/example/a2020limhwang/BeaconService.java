@@ -252,26 +252,26 @@ public class BeaconService extends Service {
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
                         Log.d("log region", Identifier.parse(beaconID[i]).toString());
                         if (attState == 0 && gapStart >= 0 && gapStart <= 1) {
-                            if (gapStart == 1) {
-                                try{
-                                    if (wakeState == 0) {
-                                        wakeState = 1;
-                                        //wake
-                                        handler2.sendEmptyMessage(0);
-                                    }
-
-                                    tmp = 1;
-                                    beaconManager.startMonitoringBeaconsInRegion(region);
-                                    beaconManager.startRangingBeaconsInRegion(region);
-
-                                } catch (RemoteException e) {
-                                }
-                            }
                             try {
                                 tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
                                 Log.d("now", "출석 start");
+                            } catch (RemoteException e) {
+                            }
+                        }
+                        else if (gapStart == 1) {
+                            try{
+                                if (wakeState == 0) {
+                                    wakeState = 1;
+                                    //wake
+                                    handler2.sendEmptyMessage(0);
+                                }
+
+                                tmp = 1;
+                                beaconManager.startMonitoringBeaconsInRegion(region);
+                                beaconManager.startRangingBeaconsInRegion(region);
+
                             } catch (RemoteException e) {
                             }
                         }
