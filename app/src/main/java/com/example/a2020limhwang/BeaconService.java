@@ -125,7 +125,8 @@ public class BeaconService extends Service {
         lectureNum = intent.getStringArrayExtra("lectureNum");
 
         beaconManager = BeaconManager.getInstanceForApplication(this);
-        beaconManager.setBackgroundMode(false);
+        beaconManager.setBackgroundBetweenScanPeriod(0);
+        beaconManager.setBackgroundScanPeriod(1500);
         myTimer = new BeaconService.MyTimer(600000, 1000);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
@@ -164,10 +165,10 @@ public class BeaconService extends Service {
                 if (beacons.size() > 0) {
                     beaconList.clear();
                     for (Beacon beacon : beacons) {
-                        if (beacon.getDistance() < 1) {
-                            Log.d("비콘", "I see a beacon that is less than 1 meters away.");
-                            beaconList.add(beacon);
-                            timerState = 1;
+                                if (beacon.getDistance() < 1) {
+                                    Log.d("비콘", "I see a beacon that is less than 1 meters away.");
+                                    beaconList.add(beacon);
+                                    timerState = 1;
                             myTimer.cancel();
                             if (tmp == 1) {
                                 attState = 1;
@@ -190,7 +191,7 @@ public class BeaconService extends Service {
 
             }
         });
-        handler.sendEmptyMessage(0);
+        handler.sendEmptyMessageDelayed(0, 10000);
         //String s = Integer.toString(beaconList.size());
 
         return super.onStartCommand(intent, flags, startId);
@@ -219,24 +220,22 @@ public class BeaconService extends Service {
 
             try {
                 for (int i = 0;i<num; i++){
-                    start_text = date_text.concat(" "+startTime[i]);
-                    end_text = date_text.concat(" "+endTime[i]);
-                    dateStart = allFormat.parse(start_text);
-                    dateEnd = allFormat.parse(end_text);
+                        start_text = date_text.concat(" "+startTime[i]);
+                        end_text = date_text.concat(" "+endTime[i]);
+                        dateStart = allFormat.parse(start_text);
+                        dateEnd = allFormat.parse(end_text);
 
-                    //log
-                    //Log.d("log date start", dateStart.toString());
-                    //Log.d("log date end", dateEnd.toString());
+                        //log
+                        //Log.d("log date start", dateStart.toString());
+                        //Log.d("log date end", dateEnd.toString());
 
-                    long gapStart = dateNow.getTime() - dateStart.getTime();
-                    long gapEnd = dateNow.getTime() - dateEnd.getTime();
+                        long gapStart = dateNow.getTime() - dateStart.getTime();
+                        long gapEnd = dateNow.getTime() - dateEnd.getTime();
 
-                    gapStart /= 60000;
-                    gapEnd /= 60000;
+                        gapStart /= 60000;
+                        gapEnd /= 60000;
 
-
-
-                    if (gapStart >= 0 && gapEnd <= 10) {
+                        if (gapStart >= 0 && gapEnd <= 10) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
@@ -250,7 +249,6 @@ public class BeaconService extends Service {
 
                         //Log.d("log now - start", Long.toString(dateNow.getTime() - dateStart.getTime()));
                         //Log.d("log now - end", Long.toString(dateNow.getTime() - dateEnd.getTime()));
-                        //log
                         Log.d("log gap start", Long.toString(gapStart));
                         Log.d("log gap end", Long.toString(gapEnd));
                         Log.d("log attState", attState+"");
@@ -303,11 +301,7 @@ public class BeaconService extends Service {
                 e.printStackTrace();
             }
 
-            for (Beacon beacon : beaconList) {
-                //textView.setText("ID : " + beacon.getId1() + " / " + "Distance : " + Double.parseDouble(String.format("%.3f", beacon.getDistance())) + "m\n");
-            }
-
-            handler.sendEmptyMessageDelayed(0, 1000);
+            handler.sendEmptyMessageDelayed(0, 10000);
         }
     };
 
