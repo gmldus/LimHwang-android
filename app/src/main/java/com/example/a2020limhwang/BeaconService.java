@@ -60,7 +60,7 @@ public class BeaconService extends Service {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     BeaconService.MyTimer myTimer;
-    int timerState = 0;
+    int timerState = 0, wakeState = 0;
     int attState, num = 0;
     long now;
     Date dateNow;
@@ -213,47 +213,6 @@ public class BeaconService extends Service {
             date_text = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(currentTime);
             //date_text=date_text.concat(" "+startTime[0]);
             Log.d("webnautes", date_text);
-            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-
-
-            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
-                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
-            String channelId2 = "channel2";
-            String channelName2 = "Channel Name2";
-
-            NotificationManager notifManager2
-
-                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-
-                NotificationChannel mChannel2 = new NotificationChannel(
-                        channelId2, channelName2, importance);
-
-                notifManager2.createNotificationChannel(mChannel2);
-
-            }
-
-            NotificationCompat.Builder builder2 =
-                    new NotificationCompat.Builder(getApplicationContext(), channelId2);
-
-            Intent notificationIntent = new Intent(getApplicationContext()
-
-                    , ListActivity.class);
-
-            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-            builder2.setContentTitle("출석 검사 중 입니다") // required
-                    .setContentText("기다려주세요")  // required
-                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
-                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
-                    .setSmallIcon(android.R.drawable.btn_star)
-                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
             try {
                 for (int i = 0;i<num; i++){
@@ -292,26 +251,27 @@ public class BeaconService extends Service {
                         Log.d("log tmp", tmp+"");
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"),Identifier.parse(beaconID[i]));
                         Log.d("log region", Identifier.parse(beaconID[i]).toString());
-                        if (attState == 0 && gapStart >= 0 && gapStart < 1) {
+                        if (attState == 0 && gapStart >= 0 && gapStart <= 1) {
+                            if (gapStart == 1) {
+                                try{
+                                    if (wakeState == 0) {
+                                        wakeState = 1;
+                                        //wake
+                                        handler2.sendEmptyMessage(0);
+                                    }
+
+                                    tmp = 1;
+                                    beaconManager.startMonitoringBeaconsInRegion(region);
+                                    beaconManager.startRangingBeaconsInRegion(region);
+
+                                } catch (RemoteException e) {
+                                }
+                            }
                             try {
                                 tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
                                 beaconManager.startRangingBeaconsInRegion(region);
                                 Log.d("now", "출석 start");
-                            } catch (RemoteException e) {
-                            }
-                        }
-                        else if(gapStart==1) {
-
-                            try{
-                                wakeLock.acquire();
-                                notifManager2.notify(0, builder2.build());
-
-                                tmp = 1;
-                                beaconManager.startMonitoringBeaconsInRegion(region);
-                                beaconManager.startRangingBeaconsInRegion(region);
-
-                                wakeLock.release();
                             } catch (RemoteException e) {
                             }
                         }
@@ -341,6 +301,10 @@ public class BeaconService extends Service {
                                 Log.d("attState", attState+"");
                                 new JSONTask().execute("http://172.30.1.59:3000/attendances/update");
                             }
+                            if (wakeState == 1) {
+                                wakeState = 0;
+                                handler2.removeMessages(0);
+                            }
                         }
                         else if (gapEnd == 1) {
                             postState = 0;
@@ -357,6 +321,57 @@ public class BeaconService extends Service {
         }
     };
 
+    Handler handler2 = new Handler() {
+        public void handleMessage(Message msg) {
+            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+
+            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
+                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
+            String channelId2 = "channel2";
+            String channelName2 = "Channel Name2";
+
+            NotificationManager notifManager2
+
+                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                NotificationChannel mChannel2 = new NotificationChannel(
+                        channelId2, channelName2, importance);
+
+                notifManager2.createNotificationChannel(mChannel2);
+
+            }
+
+            NotificationCompat.Builder builder2 =
+                    new NotificationCompat.Builder(getApplicationContext(), channelId2);
+
+            Intent notificationIntent = new Intent(getApplicationContext()
+
+                    , ListActivity.class);
+
+            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+            builder2.setContentTitle("출석 검사 중 입니다") // required
+                    .setContentText("기다려주세요")  // required
+                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                    .setSmallIcon(android.R.drawable.btn_star)
+                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+            //wake
+            wakeLock.acquire();
+            notifManager2.notify(0, builder2.build());
+            wakeLock.release();
+
+            handler2.sendEmptyMessageDelayed(0, 900000);
+        }
+    };
+
     class MyTimer extends CountDownTimer
     {
         public MyTimer(long millisInFuture, long countDownInterval)
@@ -366,15 +381,12 @@ public class BeaconService extends Service {
 
         @Override
         public void onTick(long millisUntilFinished) {
-            //textView2.setText(millisUntilFinished/1000 + " 초");
             Log.d("timer", millisUntilFinished/1000 + " 초");
         }
 
         @Override
         public void onFinish() {
-            //textView3.setText("결석");
             attState=3;
-            //결석처리
         }
     }
 
