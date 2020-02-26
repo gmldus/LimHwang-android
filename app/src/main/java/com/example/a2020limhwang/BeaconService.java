@@ -74,6 +74,8 @@ public class BeaconService extends Service {
     String[] startTime, endTime, beaconID, lectureNum;
     int index, tmp;
     int postState = 0, isChecked = 0;
+    PowerManager powerManager;
+    PowerManager.WakeLock wakeLock;
 
     public IBinder onBind(Intent intent){
         return null;
@@ -264,6 +266,57 @@ public class BeaconService extends Service {
                             } catch (RemoteException e) {
                             }
                         }
+                        else if(gapStart==1) {
+
+                            powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+
+                            wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
+                                    PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                                    PowerManager.ON_AFTER_RELEASE, "My:Tag");
+                            String channelId2 = "channel2";
+                            String channelName2 = "Channel Name2";
+
+                            NotificationManager notifManager2
+
+                                    = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+
+                                int importance = NotificationManager.IMPORTANCE_HIGH;
+
+                                NotificationChannel mChannel2 = new NotificationChannel(
+                                        channelId2, channelName2, importance);
+
+                                notifManager2.createNotificationChannel(mChannel2);
+
+                            }
+
+                            NotificationCompat.Builder builder2 =
+                                    new NotificationCompat.Builder(getApplicationContext(), channelId2);
+
+                            Intent notificationIntent = new Intent(getApplicationContext()
+
+                                    , ListActivity.class);
+
+                            notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                                    Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+                            builder2.setContentTitle("출석 검사 중 입니다") // required
+                                    .setContentText("기다려주세요")  // required
+                                    .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
+                                    .setAutoCancel(true) // 알림 터치시 반응 후 삭제
+                                    .setSmallIcon(android.R.drawable.btn_star)
+                                    .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+
+                            wakeLock.acquire();
+                            notifManager2.notify(0, builder2.build());
+                            //tmp = 1;
+                            //beaconManager.startMonitoringBeaconsInRegion(region);
+                            //beaconManager.startRangingBeaconsInRegion(region);
+                            wakeLock.release();
+
+                        }
                         else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
                             try {
                                 tmp = 2;
@@ -287,7 +340,7 @@ public class BeaconService extends Service {
                                 }
                                 //ip고치기
                                 Log.d("attState", attState+"");
-                                new JSONTask().execute("http://192.168.45.159:3000/attendances/update");
+                                new JSONTask().execute("http://172.30.1.59:3000/attendances/update");
                             }
                         }
                         else if (gapEnd == 1) {
@@ -401,9 +454,7 @@ public class BeaconService extends Service {
         @Override
         protected void onPostExecute(String result) {
 
-            PowerManager powerManager;
 
-            PowerManager.WakeLock wakeLock;
             powerManager = (PowerManager)getSystemService(Context.POWER_SERVICE);
 
             wakeLock  = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK  |
