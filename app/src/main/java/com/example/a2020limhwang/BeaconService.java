@@ -129,7 +129,7 @@ public class BeaconService extends Service {
         beaconManager = BeaconManager.getInstanceForApplication(this);
         beaconManager.setBackgroundBetweenScanPeriod(0);
         beaconManager.setBackgroundScanPeriod(1500);
-        myTimer = new BeaconService.MyTimer(600000, 1000);
+        myTimer = new BeaconService.MyTimer(1200000, 1000);
 
         beaconManager.addMonitorNotifier(new MonitorNotifier() {
             @Override
@@ -231,7 +231,7 @@ public class BeaconService extends Service {
                     gapStart /= 60000;
                     gapEnd /= 60000;
 
-                    if (gapStart >= 0 && gapEnd <= 10) {
+                    if (gapStart >= 0 && gapEnd <= 1) {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
@@ -252,7 +252,7 @@ public class BeaconService extends Service {
                         region = new Region("myBeacons", Identifier.parse("e2c56db5-dffb-48d2-b060-d0f5a71096e0"), Identifier.parse("30001"), Identifier.parse(beaconID[i]));
                         Log.d("log region", Identifier.parse(beaconID[i]).toString());
 
-                        if (gapStart == 1) {
+                        if (gapStart == 10) {
                             try {
                                 if (wakeState == 0) {
                                     wakeState = 1;
@@ -267,7 +267,7 @@ public class BeaconService extends Service {
                             } catch (RemoteException e) {
                             }
                         }
-                        if (attState == 0 && gapStart >= 0 && gapStart <= 1) {
+                        if (attState == 0 && gapStart >= 0 && gapStart <= 10) {
                             try {
                                 tmp = 1;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
@@ -275,7 +275,7 @@ public class BeaconService extends Service {
                                 Log.d("now", "출석 start");
                             } catch (RemoteException e) {
                             }
-                        } else if (attState == 0 && gapStart > 1 && gapEnd < -1) {
+                        } else if (attState == 0 && gapStart > 10 && gapEnd < -10) {
                             try {
                                 tmp = 2;
                                 beaconManager.startMonitoringBeaconsInRegion(region);
@@ -284,7 +284,7 @@ public class BeaconService extends Service {
 
                             } catch (RemoteException e) {
                             }
-                        } else if (attState == 0 && gapEnd >= -1 && gapEnd < 0) {
+                        } else if (attState == 0 && gapEnd >= -10 && gapEnd < 0) {
                             Log.d("now", "결석 start");
                             tmp = 3;
                         } else if (gapEnd == 0) {  //initialize
@@ -297,7 +297,7 @@ public class BeaconService extends Service {
                                 }
                                 //ip고치기
                                 Log.d("attState", attState + "");
-                                new JSONTask().execute("http://172.30.1.59:3000/attendances/update");
+                                new JSONTask().execute("http://192.168.0.16:3000/attendances/update");
                             }
                             if (wakeState == 1) {
                                 wakeState = 0;
@@ -365,7 +365,7 @@ public class BeaconService extends Service {
             notifManager2.notify(0, builder2.build());
             wakeLock.release();
 
-            handler2.sendEmptyMessageDelayed(0, 240000);
+            handler2.sendEmptyMessageDelayed(0, 900000);
         }
     };
 
