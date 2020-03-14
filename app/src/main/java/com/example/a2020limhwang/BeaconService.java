@@ -353,8 +353,14 @@ public class BeaconService extends Service {
             notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                     Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-            builder2.setContentTitle("출석 검사 중 입니다") // required
-                    .setContentText("기다려주세요")  // required
+            String notifyState = "";
+            if(attState==1) notifyState="현재까지 출석 입니다";
+            else if(attState==2) notifyState="현재까지 지각 입니다";
+            else if(attState==3) notifyState="현재까지 결석 입니다";
+            else if(attState==0) notifyState="현재까지 미정 입니다";
+
+            builder2.setContentTitle(notifyState) // required
+                    .setContentText("출석 검사 중 입니다.")  // required
                     .setDefaults(Notification.DEFAULT_ALL) // 알림, 사운드 진동 설정
                     .setAutoCancel(true) // 알림 터치시 반응 후 삭제
                     .setSmallIcon(android.R.drawable.btn_star)
