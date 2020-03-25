@@ -73,7 +73,7 @@ public class BeaconService extends Service {
     Region region;
     String[] startTime, endTime, beaconID, lectureNum;
     int index, tmp;
-    int postState = 0, isChecked = 0;
+    int postState = 0, isChecked = 0, chkState = 0;
     PowerManager powerManager;
     PowerManager.WakeLock wakeLock;
 
@@ -171,6 +171,8 @@ public class BeaconService extends Service {
                                     Log.d("비콘", "I see a beacon that is less than 1 meters away.");
                                     beaconList.add(beacon);
                                     timerState = 1;
+                                    checkTime = timeNow;
+                                    chkState = 1;
                             myTimer.cancel();
                             if (tmp == 1) {
                                 attState = 1;
@@ -235,7 +237,6 @@ public class BeaconService extends Service {
                         index = i;
                         if (isChecked == 0) {
                             isChecked = 1;
-                            checkTime = timeNow;
                         }
 
                         //log
@@ -536,6 +537,7 @@ public class BeaconService extends Service {
             attState = 0;
             timerState = 0;
             isChecked = 0;
+            chkState = 0;
         }
 
     }
