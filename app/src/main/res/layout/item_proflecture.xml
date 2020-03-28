@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:padding="8dp">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:padding="5dp"
+            android:textSize="12pt"
+            android:textStyle="bold"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+        <TextView
+            android:id="@+id/time1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:layout_below="@+id/name"
+            android:padding="5dp"
+            android:textSize="8pt"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+        <TextView
+            android:id="@+id/time2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@+id/percentage"
+            android:layout_below="@+id/time1"
+            android:padding="5dp"
+            android:textSize="8pt"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+    </RelativeLayout>
+</LinearLayout>

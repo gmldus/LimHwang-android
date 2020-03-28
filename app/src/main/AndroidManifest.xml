@@ -33,10 +33,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".DetailActivity" />
-        <activity android:name=".ListActivity" />
-        <activity android:name=".MypageActivity" />
-        <activity android:name=".EditActivity" />
+        <activity android:name=".DetailActivity"/>
+        <activity android:name=".ListActivity"/>
+        <activity android:name=".MypageActivity"/>
+        <activity android:name=".EditActivity"/>
+        <activity android:name=".ProfLectureActivity"/>
+        <activity android:name=".ProfMypageActivity"/>
         <service android:name=".BeaconService"/>
 
     </application>

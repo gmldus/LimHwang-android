@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     Button loginButton;
     EditText id, pw;
+    RadioButton radio_prof, radio_stud;
     String str_id, str_pw, str_result;
     ArrayList<String> studentKeyList = new ArrayList<>();
     ArrayList<String> studentValueList = new ArrayList<>();
@@ -70,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
         id = findViewById(R.id.id);
         pw = findViewById(R.id.password);
         loginButton = findViewById(R.id.loginButton);
+        radio_prof = findViewById(R.id.radio_prof);
+        radio_stud = findViewById(R.id.radio_stud);
         sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
         editor = sharedPreferences.edit();
 
@@ -88,7 +92,19 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
                 //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
                 //ip고치기
-                new JSONTask().execute("http://192.168.0.16:3000/students/login");
+
+                if (radio_stud.isChecked()) {
+                    new JSONTask().execute("http://192.168.0.16:3000/students/login");
+                }
+                else if (radio_prof.isChecked()) {
+                    Intent intent = new Intent(MainActivity.this, ProfLectureActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "소속을 선택하세요", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
