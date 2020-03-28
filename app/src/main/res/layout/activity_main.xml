@@ -15,17 +15,41 @@
         <TextView
             android:layout_width="300dp"
             android:layout_height="60dp"
+            android:layout_margin="40dp"
             android:text="스마트출결"
             android:textSize="40dp"
             android:gravity="center"
             android:fontFamily="@font/nanumsquare_light"/>
+
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="10dp">
+            <RadioButton
+                android:id="@+id/radio_prof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="교수"
+                android:fontFamily="@font/nanumsquare_regular"
+                android:textSize="20dp"/>
+            <RadioButton
+                android:id="@+id/radio_stud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:text="학생"
+                android:fontFamily="@font/nanumsquare_regular"
+                android:textSize="20dp"/>
+        </RadioGroup>
 
         <EditText
             android:id="@+id/id"
             android:layout_width="250dp"
             android:layout_height="40dp"
             android:hint="학번을 입력하세요"
-            android:textSize="15sp"
+            android:textSize="20dp"
             android:inputType="number"
             android:singleLine="true"
             android:fontFamily="@font/nanumsquare_light"/>
@@ -43,9 +67,14 @@
         <Button
             android:id="@+id/loginButton"
             android:layout_width="250dp"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:padding="20dp"
             android:text="로그인"
-            android:fontFamily="@font/nanumsquare_light"/>
+            android:textSize="20dp"
+            android:fontFamily="@font/nanumsquare_bold"
+            android:textColor="@android:color/white"
+            android:background="@color/bg"/>
 
     </LinearLayout>
 
