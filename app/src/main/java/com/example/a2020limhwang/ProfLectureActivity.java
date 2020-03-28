@@ -19,7 +19,7 @@ public class ProfLectureActivity extends AppCompatActivity {
     ImageButton back, profile;
     ListView listView;
     private SharedPreferences sharedPreferences;
-    String[] lectureName, startTime, endTime;
+    String[] lectureNum, lectureName, startTime, endTime;
     String id_prof;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +27,7 @@ public class ProfLectureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_proflecture);
 
         Intent intent = getIntent();
-        //lectureNum = intent.getStringArrayExtra("lectureNum");
+        lectureNum = intent.getStringArrayExtra("lectureNum");
         sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
         id_prof = sharedPreferences.getString("id_prof", "");
 

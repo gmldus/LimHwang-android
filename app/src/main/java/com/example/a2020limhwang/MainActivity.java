@@ -44,12 +44,12 @@ public class MainActivity extends AppCompatActivity {
     EditText id, pw;
     RadioButton radio_prof, radio_stud;
     String str_id, str_pw, str_result;
-    ArrayList<String> studentKeyList = new ArrayList<>();
-    ArrayList<String> studentValueList = new ArrayList<>();
+    ArrayList<String> studentKeyList = new ArrayList<>(), profKeyList = new ArrayList<>();
+    ArrayList<String> studentValueList = new ArrayList<>(), profValueList = new ArrayList<>();
     String[] lectureNum;
 
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences stud_sharedPreferences, prof_sharedPreferences;
+    private SharedPreferences.Editor stud_editor, prof_editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,12 +74,18 @@ public class MainActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
         radio_prof = findViewById(R.id.radio_prof);
         radio_stud = findViewById(R.id.radio_stud);
-        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
-        editor = sharedPreferences.edit();
 
-        if(sharedPreferences.getString("id_students",null)!=null){
+        stud_sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        stud_editor = stud_sharedPreferences.edit();
+        prof_sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
+        prof_editor = stud_sharedPreferences.edit();
+        if(stud_sharedPreferences.getString("id_students",null)!=null){
             //ip고치기
             new JSONTask().execute("http://192.168.0.16:3000/students/login");
+        }
+        if(prof_sharedPreferences.getString("id_professors",null)!=null){
+            //ip고치기
+            new JSONTask().execute("http://192.168.0.16:3000/professors/get");
         }
 
         loginButton.setOnClickListener(new View.OnClickListener() {
@@ -87,20 +93,20 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
-                editor.putString("id",str_id);
-                editor.putString("pw",str_pw);
-                editor.commit();
+
                 //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
                 //ip고치기
-
                 if (radio_stud.isChecked()) {
+                    stud_editor.putString("id",str_id);
+                    stud_editor.putString("pw",str_pw);
+                    stud_editor.commit();
                     new JSONTask().execute("http://192.168.0.16:3000/students/login");
                 }
                 else if (radio_prof.isChecked()) {
-                    Intent intent = new Intent(MainActivity.this, ProfLectureActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                    prof_editor.putString("id",str_id);
+                    prof_editor.putString("pw",str_pw);
+                    prof_editor.commit();
+                    new JSONTask().execute("http://192.168.0.16:3000/professors/get");
                 }
                 else {
                     Toast.makeText(getApplicationContext(), "소속을 선택하세요", Toast.LENGTH_LONG).show();
@@ -114,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("login_id", sharedPreferences.getString("id",null));
-                jsonObject.accumulate("login_password", sharedPreferences.getString("pw",null));
+                jsonObject.accumulate("login_id", str_id);
+                jsonObject.accumulate("login_password", str_pw);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -180,46 +186,85 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
             }
             else {
-                super.onPostExecute(result);
+                if(radio_stud.isChecked()) {
+                    super.onPostExecute(result);
 
-                str_result = result+"";
-                try{
-                    JSONObject jsonObject = new JSONObject(str_result);
-                    String studentValue = jsonObject.getString("studentInfo");
-                    JSONObject studentInfoObject = new JSONObject(studentValue);
-                    JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureNum");
+                    str_result = result+"";
+                    try{
+                        JSONObject jsonObject = new JSONObject(str_result);
+                        String studentValue = jsonObject.getString("studentInfo");
+                        JSONObject studentInfoObject = new JSONObject(studentValue);
+                        JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureNum");
 
-                    Iterator i = studentInfoObject.keys();
-                    while(i.hasNext()) {
-                        String b = i.next().toString();
-                        studentKeyList.add(b);
+                        Iterator i = studentInfoObject.keys();
+                        while(i.hasNext()) {
+                            String b = i.next().toString();
+                            studentKeyList.add(b);
+                        }
+                        for (int j = 0; j < studentKeyList.size(); j++) {
+                            studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
+                            stud_editor.putString(studentKeyList.get(j),studentValueList.get(j));
+                            Log.d("key",studentKeyList.get(j));
+                            Log.d("value",studentValueList.get(j));
+                        }
+                        stud_editor.commit();
+
+                        lectureNum = new String[lectureInfoArray.length()];
+                        for(int j = 0; j < lectureInfoArray.length(); j++){
+                            JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
+                            String id = tmp.getString("id_lectures");
+                            Log.d("lecnum",id);
+                            lectureNum[j] = id;
+                        }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                    for (int j = 0; j < studentKeyList.size(); j++) {
-                        studentValueList.add(studentInfoObject.getString(studentKeyList.get(j)));
-                        editor.putString(studentKeyList.get(j),studentValueList.get(j));
-                        Log.d("key",studentKeyList.get(j));
-                        Log.d("value",studentValueList.get(j));
-                    }
 
-
-                    editor.commit();
-
-                    lectureNum = new String[lectureInfoArray.length()];
-                    for(int j = 0; j < lectureInfoArray.length(); j++){
-                        JSONObject tmp = (JSONObject)lectureInfoArray.get(j);
-                        String id = tmp.getString("id_lectures");
-                        Log.d("lecnum",id);
-                        lectureNum[j] = id;
-                    }
-                }catch (JSONException e) {
-                    e.printStackTrace();
+                    Intent intent = new Intent(MainActivity.this, ListActivity.class);
+                    intent.putExtra("lectureNum", lectureNum);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
                 }
+                else if (radio_prof.isChecked()) {
+                    super.onPostExecute(result);
 
-                Intent intent = new Intent(MainActivity.this, ListActivity.class);
-                intent.putExtra("lectureNum", lectureNum);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                    str_result = result+"";
+                    try{
+                        JSONObject jsonObject = new JSONObject(str_result);
+                        JSONObject profInfo = (JSONObject) jsonObject.get("professorInfo");
+                        JSONArray profLecInfo = (JSONArray) jsonObject.get("professorLectureInfo");
+
+                        Iterator i = profInfo.keys();
+                        while(i.hasNext()) {
+                            String b = i.next().toString();
+                            profKeyList.add(b);
+                        }
+                        for (int j = 0; j < profKeyList.size(); j++) {
+                            profValueList.add(profInfo.getString(profKeyList.get(j)));
+                            prof_editor.putString(profKeyList.get(j),profValueList.get(j));
+                            Log.d("key",profKeyList.get(j));
+                            Log.d("value",profValueList.get(j));
+                        }
+                        prof_editor.commit();
+
+                        lectureNum = new String[profLecInfo.length()];
+                        for(int j = 0; j < profLecInfo.length(); j++){
+                            JSONObject tmp = (JSONObject)profLecInfo.get(j);
+                            String id = tmp.getString("id_lectures");
+                            Log.d("lecnum",id);
+                            lectureNum[j] = id;
+                        }
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    Intent intent = new Intent(MainActivity.this, ProfLectureActivity.class);
+                    intent.putExtra("lectureNum", lectureNum);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
             }
         }
     }
