@@ -1,22 +1,26 @@
 package com.example.a2020limhwang;
 
 import android.app.Activity;
-import android.content.Intent;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,56 +37,71 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
-public class ProfLectureActivity extends AppCompatActivity {
-    ImageButton back, profile;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+
+public class ProfStudentActivity extends AppCompatActivity {
+
+    ImageButton back, profile, btn_edit;
     ListView listView;
-    private SharedPreferences sharedPreferences;
-    String[] lectureNum, lectureName, startTime, endTime;
-    String id_prof;
-    private String str_result;
-    int numOfLec;
+    TextView text_lectureName;
 
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+
+    String lecture, id_students, str_result, lectureName;
+    String[] studentID, studentName, listName;
+    int numOfStu;
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_proflecture);
-
-        Intent intent = getIntent();
-        lectureNum = intent.getStringArrayExtra("lectureNum");
-        sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
-        id_prof = sharedPreferences.getString("id_professors", "");
+        setContentView(R.layout.activity_profstu);
+    }
+     /*   Intent intent = getIntent();
+        lecture = intent.getExtras().getString("lectureNum");
+        lectureName = intent.getStringExtra("lectureName");
 
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
-        listView= findViewById(R.id.listView);
+        btn_edit = findViewById(R.id.btn_edit);
+        listView= findViewById(R.id.list_detail);
+        text_lectureName = findViewById(R.id.textView_lectureName);
+
+        text_lectureName.setText(lectureName);
+
+        sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+
+        id_students = sharedPreferences.getString("id_students", "");
 
         //ip고치기
-        new ProfLectureActivity.JSONTask().execute("http://192.168.0.16:3000/lectures/get");
-    }
+        new ProfStudentActivity.JSONTask().execute("http://192.168.0.16:3000/teaches/getStudents");
 
+    }
     public class CustomList extends ArrayAdapter<String> {
         private final Activity context;
         public CustomList(Activity context ) {
-            super(context, R.layout.item, lectureName);
+            super(context, R.layout.item_profstu, listName);
             this.context = context;
         }
         @Override
         public View getView(int position, View view, ViewGroup parent) {
             LayoutInflater inflater = context.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.item, null, true);
-            TextView tv_name = rowView.findViewById(R.id.name);
-            TextView tv_time1 = rowView.findViewById(R.id.time1);
-            TextView tv_time2 = rowView.findViewById(R.id.time2);
-            TextView tv_percentage = rowView.findViewById(R.id.percentage);
+            View rowView= inflater.inflate(R.layout.item_profstu, null, true);
+            TextView tv_stunumber = rowView.findViewById(R.id.student_number);
+            TextView tv_stuname = rowView.findViewById(R.id.student_name);
 
-            tv_name.setText(lectureName[position]); // + 분반번호
-            tv_time1.setText(startTime[position]);
-            tv_time2.setText(endTime[position]);
+            tv_stunumber.setText(studentID[position]);
+            tv_stuname.setText(studentName[position]);
 
             return rowView;
         }
     }
-
     public void onClick(View v) {
         if (v.getId() == R.id.profile) {
             Intent intent = new Intent(this, ProfMypageActivity.class);
@@ -92,13 +111,12 @@ public class ProfLectureActivity extends AppCompatActivity {
             finish();
         }
     }
-
     public class JSONTask extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... urls) {
-            try{
+            try {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("array", Arrays.toString(lectureNum));
+                jsonObject.accumulate("LectureID", lecture);
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -129,21 +147,21 @@ public class ProfLectureActivity extends AppCompatActivity {
                     StringBuffer buffer = new StringBuffer();
 
                     String line = "";
-                    while((line = reader.readLine()) != null){
+                    while ((line = reader.readLine()) != null) {
                         buffer.append(line);
                     }
 
                     return buffer.toString();
-                }catch (MalformedURLException e) {
+                } catch (MalformedURLException e) {
                     e.printStackTrace();
-                }catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
-                }finally {
-                    if(con != null){
+                } finally {
+                    if (con != null) {
                         con.disconnect();
                     }
                     try {
-                        if(reader != null){
+                        if (reader != null) {
                             reader.close();
                         }
                     } catch (IOException e) {
@@ -161,49 +179,42 @@ public class ProfLectureActivity extends AppCompatActivity {
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
             //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
-            str_result = result+"";
-            try{
+            str_result = result + "";
+            try {
                 JSONObject jsonObject = new JSONObject(str_result);
-                JSONArray lectureInfoArray = jsonObject.getJSONArray("lectureList");
-                numOfLec = lectureInfoArray.length();
+                JSONArray studentInfoArray = jsonObject.getJSONArray("sutdentInfo");
+                numOfStu = studentInfoArray.length();
 
-                lectureNum =new String[numOfLec];
-                lectureName= new String[numOfLec];
-                startTime = new String[numOfLec];
-                endTime = new String[numOfLec];
+                studentID = new String[numOfStu];
+                studentName = new String[numOfStu];
 
-                for (int i = 0; i < numOfLec; i++) {
-                    JSONObject tmp = (JSONObject)lectureInfoArray.get(i);
-                    lectureNum[i] = tmp.getString("id_lectures");
-                    lectureName[i] = tmp.getString("name_lectures");
-                    startTime[i] = tmp.getString("start");
-                    endTime[i] = tmp.getString("end");
+                for (int i = 0; i < numOfStu; i++) {
+                    JSONObject tmp = (JSONObject) studentInfoArray.get(i);
+                    studentID[i] = tmp.getString("id");
+                    studentName[i] = tmp.getString("name");
 
-                    Log.d("lecnum",lectureNum[i]);
-                    Log.d("name", lectureName[i]);
-                    Log.d("time1", startTime[i]);
-                    Log.d("time2", endTime[i]);
+                    Log.d("id", studentID[i]);
+                    Log.d("name", studentName[i]);
+
                 }
 
 
-
-                ProfLectureActivity.CustomList adapter = new ProfLectureActivity.CustomList(ProfLectureActivity.this);
+                ProfStudentActivity.CustomList adapter = new ProfStudentActivity.CustomList(ProfStudentActivity.this);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Intent intent = new Intent(ProfLectureActivity.this, ProfStudentActivity.class);
-                        intent.putExtra("lectureNum", lectureNum[position]);
-                        intent.putExtra("lectureName", lectureName[position]);
+                        Intent intent = new Intent(ProfStudentActivity.this, ProfStateActivity.class);
+                        intent.putExtra("studentID", studentID[position]);
+                        intent.putExtra("studentName", studentName[position]);
+                        intent.putExtra("lectureNum",lecture);
+                        intent.putExtra("lectureName",lectureName);
                         startActivity(intent);
                     }
                 });
-            }catch (JSONException e) {
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-
-    }
-
-
+    }*/
 }

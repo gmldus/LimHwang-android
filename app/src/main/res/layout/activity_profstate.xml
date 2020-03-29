@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@color/bg">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:src="@drawable/backicon"
+                android:onClick="onClick"
+                android:background="#00000000"/>
+
+            <ImageButton
+                android:id="@+id/profile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                android:src="@drawable/person"
+                android:onClick="onClick"
+                android:background="#00000000"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textView_lectureName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(수업명)"
+            android:textSize="20pt"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="001분반"
+            android:textSize="10pt"
+            android:textColor="@android:color/white"
+            android:layout_gravity="right"
+            android:layout_margin="10dp"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/gray">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="date"
+            android:textSize="10pt"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+        <TextView
+            android:id="@+id/state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
+            android:text="state"
+            android:textSize="10pt"
+            android:fontFamily="@font/nanumsquare_light"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/listState"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp" />
+</LinearLayout>

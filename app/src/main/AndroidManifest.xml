@@ -39,6 +39,8 @@
         <activity android:name=".EditActivity"/>
         <activity android:name=".ProfLectureActivity"/>
         <activity android:name=".ProfMypageActivity"/>
+        <activity android:name=".ProfStudentActivity"/>
+        <activity android:name=".ProfStateActivity"/>
         <service android:name=".BeaconService"/>
 
     </application>
