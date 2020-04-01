@@ -29,8 +29,8 @@ public class ProfMypageActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
         editor = sharedPreferences.edit();
         String major = sharedPreferences.getString("major", "");
-        String number = sharedPreferences.getString("id_prof", "");
-        String name = sharedPreferences.getString("name_prof", "");
+        String number = sharedPreferences.getString("id_professors", "");
+        String name = sharedPreferences.getString("name_professors", "");
 
         //prof_major.setText(major);
         //prof_number.setText(number);

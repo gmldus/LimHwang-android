@@ -81,11 +81,15 @@ public class MainActivity extends AppCompatActivity {
         stud_editor = stud_sharedPreferences.edit();
         prof_sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
         prof_editor = stud_sharedPreferences.edit();
+
+        Log.d("MainActivity", "id_students: " + stud_sharedPreferences.getString("id_students", null));
+        Log.d("MainActivity", "id_professors: " + stud_sharedPreferences.getString("id_professors", null));
+
         if(stud_sharedPreferences.getString("id_students",null)!=null){
             //ip고치기
             new JSONTask().execute("http://192.168.35.129:3000/students/login");
         }
-        if(prof_sharedPreferences.getString("id_professors",null)!=null){
+        else if(prof_sharedPreferences.getString("id_professors",null)!=null){
             //ip고치기
             new JSONTask().execute("http://192.168.35.129:3000/professors/get");
         }
@@ -96,17 +100,12 @@ public class MainActivity extends AppCompatActivity {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
 
-                //Log.d("wdwdwdwdwdwdwdw",sharedPreferences.getString("id",null));
                 //ip고치기
                 if (radio_stud.isChecked()) {
-                    stud_editor.putString("id",str_id);
-                    stud_editor.putString("pw",str_pw);
                     stud_editor.commit();
                     new JSONTask().execute("http://192.168.35.129:3000/students/login");
                 }
                 else if (radio_prof.isChecked()) {
-                    prof_editor.putString("id",str_id);
-                    prof_editor.putString("pw",str_pw);
                     prof_editor.commit();
                     new JSONTask().execute("http://192.168.35.129:3000/professors/get");
                 }
