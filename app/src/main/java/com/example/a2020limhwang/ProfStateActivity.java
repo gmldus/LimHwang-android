@@ -82,7 +82,7 @@ public class ProfStateActivity extends AppCompatActivity{
         id_students = sharedPreferences.getString("id_students", "");
 
         //ip고치기
-        new ProfStateActivity.JSONTask().execute("http://192.168.0.16:3000/attendances/get");
+        new ProfStateActivity.JSONTask().execute("http://192.168.35.129:3000/attendances/get");
 
     }
     public class CustomList extends ArrayAdapter<String> {

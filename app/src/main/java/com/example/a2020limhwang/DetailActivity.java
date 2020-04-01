@@ -96,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
         text_percentage.setText((int)rateAtt+"");
 
         //ip고치기
-        new JSONTask().execute("http://192.168.0.16:3000/attendances/get");
+        new JSONTask().execute("http://192.168.35.129:3000/attendances/get");
 
     }
 

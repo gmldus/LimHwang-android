@@ -57,7 +57,7 @@ public class ProfLectureActivity extends AppCompatActivity {
         listView= findViewById(R.id.listView);
 
         //ip고치기
-        new ProfLectureActivity.JSONTask().execute("http://192.168.0.16:3000/lectures/get");
+        new ProfLectureActivity.JSONTask().execute("http://192.168.35.129:3000/lectures/get");
     }
 
     public class CustomList extends ArrayAdapter<String> {

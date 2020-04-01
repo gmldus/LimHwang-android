@@ -61,15 +61,15 @@ public class ProfStudentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profstu);
-    }
-     /*   Intent intent = getIntent();
+
+        Intent intent = getIntent();
         lecture = intent.getExtras().getString("lectureNum");
         lectureName = intent.getStringExtra("lectureName");
 
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         btn_edit = findViewById(R.id.btn_edit);
-        listView= findViewById(R.id.list_detail);
+        listView= findViewById(R.id.listStu);
         text_lectureName = findViewById(R.id.textView_lectureName);
 
         text_lectureName.setText(lectureName);
@@ -80,13 +80,13 @@ public class ProfStudentActivity extends AppCompatActivity {
         id_students = sharedPreferences.getString("id_students", "");
 
         //ip고치기
-        new ProfStudentActivity.JSONTask().execute("http://192.168.0.16:3000/teaches/getStudents");
+        new ProfStudentActivity.JSONTask().execute("http://192.168.35.129:3000/teaches/getStudents");
 
     }
     public class CustomList extends ArrayAdapter<String> {
         private final Activity context;
         public CustomList(Activity context ) {
-            super(context, R.layout.item_profstu, listName);
+            super(context, R.layout.item_profstu, studentID);
             this.context = context;
         }
         @Override
@@ -178,13 +178,13 @@ public class ProfStudentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result + "";
             try {
                 JSONObject jsonObject = new JSONObject(str_result);
-                JSONArray studentInfoArray = jsonObject.getJSONArray("sutdentInfo");
+                JSONArray studentInfoArray = jsonObject.getJSONArray("studentInfo");
                 numOfStu = studentInfoArray.length();
-
+                Log.d("dddddddddddddddddddddd", Integer.toString(numOfStu));
                 studentID = new String[numOfStu];
                 studentName = new String[numOfStu];
 
@@ -199,7 +199,7 @@ public class ProfStudentActivity extends AppCompatActivity {
                 }
 
 
-                ProfStudentActivity.CustomList adapter = new ProfStudentActivity.CustomList(ProfStudentActivity.this);
+                CustomList adapter = new CustomList(ProfStudentActivity.this);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -216,5 +216,5 @@ public class ProfStudentActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }*/
+    }
 }
