@@ -53,7 +53,7 @@ public class ProfStateActivity extends AppCompatActivity{
     private SharedPreferences.Editor editor;
 
     String lecture, id_students, str_result, lectureName, studentID, studentName;
-    String[] listState, date, state;
+    String[] date, state;
     int numOfState;
 
 
@@ -71,7 +71,7 @@ public class ProfStateActivity extends AppCompatActivity{
         back = findViewById(R.id.back);
         profile = findViewById(R.id.profile);
         btn_edit = findViewById(R.id.btn_edit);
-        listView= findViewById(R.id.list_detail);
+        listView= findViewById(R.id.listState);
         text_lectureName = findViewById(R.id.textView_lectureName);
 
         text_lectureName.setText(lectureName);
@@ -88,7 +88,7 @@ public class ProfStateActivity extends AppCompatActivity{
     public class CustomList extends ArrayAdapter<String> {
         private final Activity context;
         public CustomList(Activity context ) {
-            super(context, R.layout.item_profstate, listState);
+            super(context, R.layout.item_profstate, date);
             this.context = context;
         }
         @Override
@@ -181,7 +181,7 @@ public class ProfStateActivity extends AppCompatActivity{
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result + "";
             try {
                 JSONObject jsonObject = new JSONObject(str_result);
@@ -214,7 +214,7 @@ public class ProfStateActivity extends AppCompatActivity{
 
                 }
 
-                ProfStateActivity.CustomList adapter = new ProfStateActivity.CustomList(ProfStateActivity.this);
+                CustomList adapter = new CustomList(ProfStateActivity.this);
                 listView.setAdapter(adapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override

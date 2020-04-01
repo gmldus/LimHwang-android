@@ -53,7 +53,7 @@ public class ProfStudentActivity extends AppCompatActivity {
     private SharedPreferences.Editor editor;
 
     String lecture, id_students, str_result, lectureName;
-    String[] studentID, studentName, listName;
+    String[] studentID, studentName;
     int numOfStu;
 
 
@@ -178,13 +178,13 @@ public class ProfStudentActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), result, Toast.LENGTH_LONG).show();
             str_result = result + "";
             try {
                 JSONObject jsonObject = new JSONObject(str_result);
                 JSONArray studentInfoArray = jsonObject.getJSONArray("studentInfo");
                 numOfStu = studentInfoArray.length();
-                Log.d("dddddddddddddddddddddd", Integer.toString(numOfStu));
+
                 studentID = new String[numOfStu];
                 studentName = new String[numOfStu];
 
