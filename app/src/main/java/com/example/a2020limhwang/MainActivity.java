@@ -102,11 +102,15 @@ public class MainActivity extends AppCompatActivity {
 
                 //ip고치기
                 if (radio_stud.isChecked()) {
+                    stud_editor.putString("id", str_pw);
+                    stud_editor.putString("pw", str_pw);
                     stud_editor.commit();
                     new JSONTask().execute("http://192.168.0.76:3000/students/login");
                 }
                 else if (radio_prof.isChecked()) {
-                    prof_editor.commit();
+                    stud_editor.putString("id", str_pw);
+                    stud_editor.putString("pw", str_pw);
+                    stud_editor.commit();
                     new JSONTask().execute("http://192.168.0.76:3000/professors/get");
                 }
                 else {
@@ -121,8 +125,8 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("login_id", str_id);
-                jsonObject.accumulate("login_password", str_pw);
+                jsonObject.accumulate("login_id", stud_sharedPreferences.getString("id", null));
+                jsonObject.accumulate("login_password", stud_sharedPreferences.getString("pw", null));
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
