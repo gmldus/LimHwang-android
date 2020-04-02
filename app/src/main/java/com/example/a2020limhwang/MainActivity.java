@@ -102,13 +102,13 @@ public class MainActivity extends AppCompatActivity {
 
                 //ip고치기
                 if (radio_stud.isChecked()) {
-                    stud_editor.putString("id", str_pw);
+                    stud_editor.putString("id", str_id);
                     stud_editor.putString("pw", str_pw);
                     stud_editor.commit();
                     new JSONTask().execute("http://192.168.0.76:3000/students/login");
                 }
                 else if (radio_prof.isChecked()) {
-                    stud_editor.putString("id", str_pw);
+                    stud_editor.putString("id", str_id);
                     stud_editor.putString("pw", str_pw);
                     stud_editor.commit();
                     new JSONTask().execute("http://192.168.0.76:3000/professors/get");
