@@ -80,7 +80,7 @@ public class ProfStudentActivity extends AppCompatActivity {
         id_students = sharedPreferences.getString("id_students", "");
 
         //ip고치기
-        new ProfStudentActivity.JSONTask().execute("http://192.168.35.129:3000/teaches/getStudents");
+        new ProfStudentActivity.JSONTask().execute("http://192.168.0.76:3000/teaches/getStudents");
 
     }
     public class CustomList extends ArrayAdapter<String> {

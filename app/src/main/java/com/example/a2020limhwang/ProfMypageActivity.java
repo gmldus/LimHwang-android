@@ -19,7 +19,7 @@ public class ProfMypageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_mypage);
+        setContentView(R.layout.activity_profmypage);
 
         back = findViewById(R.id.back);
         prof_major = findViewById(R.id.prof_major);
@@ -32,9 +32,9 @@ public class ProfMypageActivity extends AppCompatActivity {
         String number = sharedPreferences.getString("id_professors", "");
         String name = sharedPreferences.getString("name_professors", "");
 
-        //prof_major.setText(major);
-        //prof_number.setText(number);
-        //prof_name.setText(name);
+        prof_major.setText(major);
+        prof_number.setText(number);
+        prof_name.setText(name);
     }
 
     public void onClick(View v) {

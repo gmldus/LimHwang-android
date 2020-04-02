@@ -298,7 +298,7 @@ public class BeaconService extends Service {
                                 }
                                 //ip고치기
                                 Log.d("attState", attState + "");
-                                new JSONTask().execute("http://192.168.0.16:3000/attendances/update");
+                                new JSONTask().execute("http://192.168.0.76:3000/attendances/update");
                             }
                             if (wakeState == 1) {
                                 wakeState = 0;
