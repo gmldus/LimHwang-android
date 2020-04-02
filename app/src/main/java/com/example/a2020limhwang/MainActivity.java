@@ -82,15 +82,10 @@ public class MainActivity extends AppCompatActivity {
         prof_sharedPreferences = getSharedPreferences("pFile", MODE_PRIVATE);
         prof_editor = prof_sharedPreferences.edit();
 
-        Log.d("MainActivity", "id_students: " + stud_sharedPreferences.getString("id_students", null));
-        Log.d("MainActivity", "id_professors: " + prof_sharedPreferences.getString("id_professors", null));
-
-        if(stud_sharedPreferences.getString("id_students",null)!=null){
-            //ip고치기
+        if(stud_sharedPreferences.getString("id",null)!=null){
             new JSONTask().execute("http://192.168.0.76:3000/students/login");
         }
-        else if(prof_sharedPreferences.getString("id_professors",null)!=null){
-            //ip고치기
+        else if(prof_sharedPreferences.getString("id",null)!=null){
             new JSONTask().execute("http://192.168.0.76:3000/professors/get");
         }
 
@@ -100,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 str_id = id.getText().toString();
                 str_pw = pw.getText().toString();
 
-                //ip고치기
                 if (radio_stud.isChecked()) {
                     stud_editor.putString("id", str_id);
                     stud_editor.putString("pw", str_pw);
@@ -108,9 +102,9 @@ public class MainActivity extends AppCompatActivity {
                     new JSONTask().execute("http://192.168.0.76:3000/students/login");
                 }
                 else if (radio_prof.isChecked()) {
-                    stud_editor.putString("id", str_id);
-                    stud_editor.putString("pw", str_pw);
-                    stud_editor.commit();
+                    prof_editor.putString("id", str_id);
+                    prof_editor.putString("pw", str_pw);
+                    prof_editor.commit();
                     new JSONTask().execute("http://192.168.0.76:3000/professors/get");
                 }
                 else {
@@ -125,8 +119,14 @@ public class MainActivity extends AppCompatActivity {
         protected String doInBackground(String... urls) {
             try{
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.accumulate("login_id", stud_sharedPreferences.getString("id", null));
-                jsonObject.accumulate("login_password", stud_sharedPreferences.getString("pw", null));
+                if(stud_sharedPreferences.getString("id",null)!=null){
+                    jsonObject.accumulate("login_id", stud_sharedPreferences.getString("id", null));
+                    jsonObject.accumulate("login_password", stud_sharedPreferences.getString("pw", null));
+                }
+                else if(prof_sharedPreferences.getString("id",null)!=null){
+                    jsonObject.accumulate("login_id", prof_sharedPreferences.getString("id", null));
+                    jsonObject.accumulate("login_password", prof_sharedPreferences.getString("pw", null));
+                }
 
                 HttpURLConnection con = null;
                 BufferedReader reader = null;
@@ -187,11 +187,13 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String result) {
+
             if (result == null) {
                 Toast.makeText(getApplicationContext(), "로그인 실패", Toast.LENGTH_LONG).show();
             }
             else {
-                if(radio_stud.isChecked()) {
+                if(stud_sharedPreferences.getString("id",null)!=null){
+
                     super.onPostExecute(result);
 
                     str_result = result+"";
@@ -231,7 +233,8 @@ public class MainActivity extends AppCompatActivity {
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                 }
-                else if (radio_prof.isChecked()) {
+                else if(prof_sharedPreferences.getString("id",null)!=null){
+
                     super.onPostExecute(result);
 
                     str_result = result+"";
